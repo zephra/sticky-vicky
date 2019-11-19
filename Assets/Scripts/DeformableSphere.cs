@@ -17,6 +17,8 @@ public class DeformableSphere : MonoBehaviour
 //    private List<SpringJoint> jumpSprings;
 
     private GameObject[] particles;
+    private Rigidbody[] rigidbodies;
+    private Vector3 center;
     
     // Start is called before the first frame update
     void Start()
@@ -26,13 +28,15 @@ public class DeformableSphere : MonoBehaviour
         
         particles = new GameObject[vertices.Length];
 //        jumpSprings = new List<SpringJoint>();
+        rigidbodies = new Rigidbody[vertices.Length];
         
         Debug.Log("Mesh been loaded fo sho, "+vertices.Length+" vertices");
 
         for (int i = 0; i < vertices.Length; i++)
         {
             var pos1 = transform.TransformPoint(vertices[i]);
-            particles[i] = Instantiate(particle, pos1, Quaternion.identity);
+            particles[i] = Instantiate(particle, pos1, Quaternion.identity, transform);
+            rigidbodies[i] = particles[i].GetComponent<Rigidbody>();
         }
 
         for (int i = 0; i < particles.Length; i++)
@@ -63,11 +67,16 @@ public class DeformableSphere : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        var posSum = Vector3.zero;
         for (int i = 0; i < particles.Length; i++)
         {
             vertices[i] = particles[i].transform.position;
+            posSum += vertices[i];
         }
+
+        center = posSum / vertices.Length;
+//        Debug.Log("Center: "+center);
+//        transform.position = center;
 
         mesh.vertices = vertices;
         mesh.RecalculateNormals();
@@ -87,11 +96,13 @@ public class DeformableSphere : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.W)) // UP
         {
-            ApplyForceToParticles(Vector3.forward, inputForce);
+//            ApplyForceToParticles(Vector3.forward, inputForce);
+            PushParticlesAroundAxis(center, Vector3.right, inputForce);
         }
         if (Input.GetKey(KeyCode.S)) // DOWN
         {
-            ApplyForceToParticles(Vector3.back, inputForce);
+//            ApplyForceToParticles(Vector3.back, inputForce);
+            PushParticlesAroundAxis(center, Vector3.left, inputForce);
         }
         
 //        if (Input.GetKey(KeyCode.Space)) // JUMP
@@ -117,6 +128,27 @@ public class DeformableSphere : MonoBehaviour
         foreach (GameObject p in particles)
         {
             p.GetComponent<Rigidbody>().AddForce(Time.fixedDeltaTime * force * direction);
+        }
+    }
+
+    private void PushParticlesAroundAxis(Vector3 centerPoint, Vector3 axis, float force)
+    {
+        for(int i = 0; i < particles.Length; i++)
+        {
+            var p = particles[i];
+            
+            var particlePoint = p.transform.position;
+//            Debug.DrawLine(particlePoint, particlePoint * 0.99f, Color.red);
+            var vectorFromCenter = particlePoint - centerPoint;
+//            Debug.DrawLine(centerPoint, centerPoint + vectorFromCenter * 2, Color.red);
+            var projectedPoint = Vector3.Project(vectorFromCenter, axis) + centerPoint;
+//            Debug.DrawLine(projectedPoint, projectedPoint * 0.99f, Color.red);
+            var vectorFromProjected = particlePoint - projectedPoint;
+//            Debug.DrawLine(projectedPoint, projectedPoint + vectorFromProjected * 2, Color.red);
+            var direction = Vector3.Cross(axis, vectorFromProjected).normalized;
+//            Debug.DrawLine(particlePoint, particlePoint + direction * 2, Color.red);
+
+            rigidbodies[i].AddForce(Time.fixedDeltaTime * force * direction);
         }
     }
 }
