@@ -41,16 +41,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 3308091450554102350}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6722a8afeb56b47c4a2aaabb6710df54, type: 3}
+  m_Script: {fileID: 11500000, guid: f2fc7ea942d16437c849d8547455106f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   particle: {fileID: 6978694958024970224, guid: 93e9171ce11b84ca6988471bee065256,
     type: 3}
   minThreshold: 1
   maxThreshold: 1.8
-  springDampening: 0.75
-  springSpring: 20
-  inputForce: 50
+  springDampening: 2
+  springSpring: 30
+  inputForce: 100
 --- !u!1001 &3308091450409411102
 PrefabInstance:
   m_ObjectHideFlags: 0

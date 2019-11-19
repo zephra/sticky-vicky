@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeformableSphere : MonoBehaviour
+public class VickySphere : MonoBehaviour
 {
     public GameObject particle;
     public float minThreshold = 0.3f;
@@ -18,7 +18,7 @@ public class DeformableSphere : MonoBehaviour
 
     private GameObject[] particles;
     private Rigidbody[] rigidbodies;
-    private Vector3 center;
+    public Vector3 center { get; private set; }
     
     // Start is called before the first frame update
     void Start()
