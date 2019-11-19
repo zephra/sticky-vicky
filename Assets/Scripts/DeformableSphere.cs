@@ -70,6 +70,7 @@ public class DeformableSphere : MonoBehaviour
         mesh.vertices = vertices;
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
+        mesh.RecalculateTangents();
     }
 
     private void FixedUpdate()
