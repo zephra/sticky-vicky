@@ -6,10 +6,12 @@ using UnityEngine;
 public class VickySphere : MonoBehaviour
 {
     public GameObject particle;
+    public Camera camera;
+    [Space]
     public float minThreshold = 0.3f;
     public float maxThreshold = 0.99f;
     public float springDampening = 0.75f;
-    public float springSpring = 10f;
+    public float springStrength = 10f;
     public float inputForce = 10;
     
     private Mesh mesh;
@@ -19,6 +21,8 @@ public class VickySphere : MonoBehaviour
     private GameObject[] particles;
     private Rigidbody[] rigidbodies;
     public Vector3 center { get; private set; }
+
+    private Vector3 cameraVector; 
     
     // Start is called before the first frame update
     void Start()
@@ -50,7 +54,7 @@ public class VickySphere : MonoBehaviour
                 var dist = Vector3.Distance(p.transform.position, q.transform.position);
                 if (dist < minThreshold || dist > maxThreshold)
                 {
-                    AddSpring(p, q, springDampening, springSpring);
+                    AddSpring(p, q, springDampening, springStrength);
                     
 //                    var springJoint = AddSpring(p, q);
 //                    if (dist > maxThreshold)
@@ -62,6 +66,8 @@ public class VickySphere : MonoBehaviour
         transform.position = Vector3.zero;
         transform.rotation = Quaternion.identity;
         transform.localScale = Vector3.one;
+
+        cameraVector = camera.transform.position - transform.position;
     }
 
     // Update is called once per frame
@@ -82,6 +88,8 @@ public class VickySphere : MonoBehaviour
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
         mesh.RecalculateTangents();
+
+        camera.transform.position = center + cameraVector;
     }
 
     private void FixedUpdate()

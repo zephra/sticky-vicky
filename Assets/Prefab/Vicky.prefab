@@ -46,10 +46,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   particle: {fileID: 6978694958024970224, guid: 93e9171ce11b84ca6988471bee065256,
     type: 3}
+  camera: {fileID: 0}
   minThreshold: 1
-  maxThreshold: 1.8
+  maxThreshold: 1.7
   springDampening: 2
-  springSpring: 30
+  springStrength: 50
   inputForce: 100
 --- !u!1001 &3308091450409411102
 PrefabInstance:
