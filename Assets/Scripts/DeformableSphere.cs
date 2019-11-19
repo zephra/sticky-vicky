@@ -10,8 +10,6 @@ public class DeformableSphere : MonoBehaviour
     public float maxThreshold = 0.99f;
     public float springDampening = 0.75f;
     public float springSpring = 10f;
-    public float midSpringDampening = 0.75f;
-    public float midSpringSpring = 10f;
     public float inputForce = 10;
     
     private Mesh mesh;
@@ -26,7 +24,7 @@ public class DeformableSphere : MonoBehaviour
         mesh = GetComponentInChildren<MeshFilter>().mesh;
         vertices = mesh.vertices;
         
-        particles = new GameObject[vertices.Length+1];
+        particles = new GameObject[vertices.Length];
 //        jumpSprings = new List<SpringJoint>();
         
         Debug.Log("Mesh been loaded fo sho, "+vertices.Length+" vertices");
@@ -37,20 +35,16 @@ public class DeformableSphere : MonoBehaviour
             particles[i] = Instantiate(particle, pos1, Quaternion.identity);
         }
 
-        var pos2 = gameObject.transform.position;
-        var midParticle = Instantiate(particle, pos2, Quaternion.identity);
-        particles[particles.Length - 1] = midParticle;
-
-        for (int i = 0; i < particles.Length-1; i++)
+        for (int i = 0; i < particles.Length; i++)
         {
             var p = particles[i];
-            for (int j = 0; j < particles.Length-1; j++)
+            for (int j = 0; j < particles.Length; j++)
             {
                 if (i == j) continue;
                 
                 var q = particles[j];
                 var dist = Vector3.Distance(p.transform.position, q.transform.position);
-                if (dist < minThreshold)
+                if (dist < minThreshold || dist > maxThreshold)
                 {
                     AddSpring(p, q, springDampening, springSpring);
                     
@@ -59,7 +53,6 @@ public class DeformableSphere : MonoBehaviour
 //                        jumpSprings.Add(springJoint);
                 }
             }
-            AddSpring(p, midParticle, midSpringDampening, midSpringSpring);
         }
         
         transform.position = Vector3.zero;
@@ -71,7 +64,7 @@ public class DeformableSphere : MonoBehaviour
     void Update()
     {
         
-        for (int i = 0; i < particles.Length-1; i++)
+        for (int i = 0; i < particles.Length; i++)
         {
             vertices[i] = particles[i].transform.position;
         }
@@ -95,7 +88,6 @@ public class DeformableSphere : MonoBehaviour
         if (Input.GetKey(KeyCode.W)) // UP
         {
             ApplyForceToParticles(Vector3.forward, inputForce);
-//            particles[particles.Length-1].transform.Rotate(10f, 0, 0, Space.World);
         }
         if (Input.GetKey(KeyCode.S)) // DOWN
         {
@@ -118,13 +110,6 @@ public class DeformableSphere : MonoBehaviour
         springJoint.damper = dampening;
         springJoint.spring = spring;
         return springJoint;
-    }
-    
-    private FixedJoint AddFixed(GameObject particle1, GameObject particle2, float dampening, float spring)
-    {
-        var fixedJoint = particle1.AddComponent<FixedJoint>();
-        fixedJoint.connectedBody = particle2.GetComponent<Rigidbody>();
-        return fixedJoint;
     }
 
     private void ApplyForceToParticles(Vector3 direction, float force)
