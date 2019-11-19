@@ -195,7 +195,7 @@ PrefabInstance:
     - target: {fileID: -2416733968201007103, guid: c8c73992c92694791b9e4ffe206a345b,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c8c73992c92694791b9e4ffe206a345b, type: 3}
@@ -429,6 +429,8 @@ MonoBehaviour:
   maxThreshold: 1.8
   springDampening: 0.75
   springSpring: 10
+  midSpringDampening: 10
+  midSpringSpring: 100
   inputForce: 50
 --- !u!1 &1607709666
 GameObject:
