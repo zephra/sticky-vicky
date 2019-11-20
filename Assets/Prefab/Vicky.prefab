@@ -52,6 +52,7 @@ MonoBehaviour:
   springDampening: 2
   springStrength: 50
   inputForce: 100
+  rotationSpeed: 7
 --- !u!1001 &3308091450409411102
 PrefabInstance:
   m_ObjectHideFlags: 0

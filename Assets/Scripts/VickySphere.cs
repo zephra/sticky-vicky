@@ -12,7 +12,9 @@ public class VickySphere : MonoBehaviour
     public float maxThreshold = 0.99f;
     public float springDampening = 0.75f;
     public float springStrength = 10f;
+    [Space]
     public float inputForce = 10;
+    public float rotationSpeed = 10;
     
     private Mesh mesh;
     private Vector3[] vertices;
@@ -22,7 +24,8 @@ public class VickySphere : MonoBehaviour
     private Rigidbody[] rigidbodies;
     public Vector3 center { get; private set; }
 
-    private Vector3 cameraVector; 
+    private Vector3 cameraVector;
+    private Vector3 pivotAxis;
     
     // Start is called before the first frame update
     void Start()
@@ -68,6 +71,7 @@ public class VickySphere : MonoBehaviour
         transform.localScale = Vector3.one;
 
         cameraVector = camera.transform.position - transform.position;
+        pivotAxis = Vector3.right;
     }
 
     // Update is called once per frame
@@ -87,30 +91,30 @@ public class VickySphere : MonoBehaviour
         mesh.vertices = vertices;
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
-        mesh.RecalculateTangents();
-
-        camera.transform.position = center + cameraVector;
+        mesh.RecalculateTangents();;
     }
 
     private void FixedUpdate()
     {
         if (Input.GetKey(KeyCode.A)) // LEFT
         {
-            ApplyForceToParticles(Vector3.left, inputForce);
+//            ApplyForceToParticles(Vector3.left, inputForce);
+            RotateCamera(center, -rotationSpeed);
         }
         if (Input.GetKey(KeyCode.D)) // RIGHT
         {
-            ApplyForceToParticles(Vector3.right, inputForce);
+//            ApplyForceToParticles(Vector3.right, inputForce);
+            RotateCamera(center, rotationSpeed);
         }
         if (Input.GetKey(KeyCode.W)) // UP
         {
 //            ApplyForceToParticles(Vector3.forward, inputForce);
-            PushParticlesAroundAxis(center, Vector3.right, inputForce);
+            PushParticlesAroundAxis(center, pivotAxis, inputForce);
         }
         if (Input.GetKey(KeyCode.S)) // DOWN
         {
 //            ApplyForceToParticles(Vector3.back, inputForce);
-            PushParticlesAroundAxis(center, Vector3.left, inputForce);
+            PushParticlesAroundAxis(center, -pivotAxis, inputForce);
         }
         
 //        if (Input.GetKey(KeyCode.Space)) // JUMP
@@ -120,6 +124,11 @@ public class VickySphere : MonoBehaviour
 ////                s.
 //            }
 //        }
+    }
+
+    private void LateUpdate()
+    {
+        camera.transform.position = center + cameraVector;
     }
 
     private SpringJoint AddSpring(GameObject particle1, GameObject particle2, float dampening, float spring)
@@ -137,6 +146,15 @@ public class VickySphere : MonoBehaviour
         {
             p.GetComponent<Rigidbody>().AddForce(Time.fixedDeltaTime * force * direction);
         }
+    }
+
+    private void RotateCamera(Vector3 centerPoint, float direction)
+    {
+        camera.transform.RotateAround(centerPoint, Vector3.up, direction);
+        cameraVector = Quaternion.AngleAxis(direction, Vector3.up) * cameraVector;
+        pivotAxis = Quaternion.AngleAxis(direction, Vector3.up) * pivotAxis;
+        
+        Debug.DrawLine(centerPoint, centerPoint + pivotAxis * 10, Color.magenta);
     }
 
     private void PushParticlesAroundAxis(Vector3 centerPoint, Vector3 axis, float force)
