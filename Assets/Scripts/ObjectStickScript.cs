@@ -14,9 +14,11 @@ public class ObjectStickScript : MonoBehaviour
     }
     private SpringJoint AddSpringJoint(GameObject vickyParticle)
     {
-        var fixedJoint = gameObject.AddComponent<SpringJoint>();
-        fixedJoint.connectedBody = vickyParticle.GetComponent<Rigidbody>();
-        return fixedJoint;
+        var springJoint = gameObject.AddComponent<SpringJoint>();
+        springJoint.connectedBody = vickyParticle.GetComponent<Rigidbody>();
+        springJoint.damper = 10;
+        springJoint.spring = 100;
+        return springJoint;
     }
 
     // Start is called before the first frame update
@@ -35,8 +37,10 @@ public class ObjectStickScript : MonoBehaviour
     {
         if (myJoint == null && other.name.StartsWith("Particle"))
         {
+            VickySphere vicky = other.transform.parent.gameObject.GetComponent<VickySphere>();
             myJoint = AddFixedJoint(other.gameObject);
-            AddSpringJoint(other.transform.parent.gameObject.GetComponent<VickySphere>().anchorParticle);
+            AddSpringJoint(vicky.anchorParticle);
+            vicky.stickedObjects.Add(gameObject);
         }
     }
 }

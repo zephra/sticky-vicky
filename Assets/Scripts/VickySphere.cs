@@ -23,6 +23,7 @@ public class VickySphere : MonoBehaviour
 
     private GameObject[] particles;
     private Rigidbody[] rigidbodies;
+    public List<GameObject> stickedObjects;
     public Vector3 center { get; private set; }
     public GameObject anchorParticle { get; private set; }
 
@@ -49,9 +50,13 @@ public class VickySphere : MonoBehaviour
             posSum += pos1;
         }
         center = posSum / vertices.Length;
+        //make anchor
+        anchorParticle = Instantiate(particle, center, Quaternion.identity, transform);
         foreach (GameObject p in particles)
         {
             p.transform.forward = center - p.transform.position;
+            AddSpring(p, anchorParticle, springDampening, springStrength);
+
         }
 
         for (int i = 0; i < particles.Length; i++)
@@ -79,9 +84,6 @@ public class VickySphere : MonoBehaviour
         transform.position = Vector3.zero;
         transform.rotation = Quaternion.identity;
         transform.localScale = Vector3.one;
-
-        //make anchor
-        anchorParticle = Instantiate(particle, center, Quaternion.identity, transform);
     }
 
     // Update is called once per frame
@@ -95,8 +97,8 @@ public class VickySphere : MonoBehaviour
         }
 
         center = posSum / vertices.Length;
-        anchorParticle.transform.position = center;
-        anchorParticle.transform.forward = particles[0].transform.position - center;
+        //anchorParticle.transform.position = center;
+        //anchorParticle.transform.forward = particles[0].transform.position - center;
 
 
         mesh.vertices = vertices;
@@ -193,6 +195,24 @@ public class VickySphere : MonoBehaviour
                 //rigidbodies[i].AddTorque(Time.fixedDeltaTime * force * direction);
                 rigidbodies[i].AddForce(Time.fixedDeltaTime * force * 0.4f * mvmtDir);
             }
+        }
+        foreach (GameObject obj in stickedObjects)
+        {
+            var particlePoint = obj.transform.position;
+            var vectorFromCenter = particlePoint - centerPoint;
+            var projectedPoint = Vector3.Project(vectorFromCenter, axis) + centerPoint;
+            var vectorFromProjected = particlePoint - projectedPoint;
+            var direction = Vector3.Cross(axis, vectorFromProjected).normalized;
+
+            var body = obj.GetComponent<Rigidbody>();
+            var magnitudeInDir = Vector3.Dot(body.velocity, direction);
+
+            if (magnitudeInDir < maxSpin)
+            {
+                body.AddForce(Time.fixedDeltaTime * force * direction);
+                body.AddForce(Time.fixedDeltaTime * force * 0.4f * mvmtDir);
+            }
+
         }
     }
 }
