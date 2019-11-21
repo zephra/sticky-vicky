@@ -26,7 +26,6 @@ public class VickySphere : MonoBehaviour
     public Vector3 center { get; private set; }
 
     private Vector3 cameraVector;
-    private Vector3 pivotAxis;
     
     // Start is called before the first frame update
     void Start()
@@ -72,7 +71,6 @@ public class VickySphere : MonoBehaviour
         transform.localScale = Vector3.one;
 
         cameraVector = camera.transform.position - transform.position;
-        pivotAxis = Vector3.right;
     }
 
     // Update is called once per frame
@@ -105,20 +103,32 @@ public class VickySphere : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.W)) // UP
         {
-            PushParticlesAroundAxis(center, pivotAxis, inputForce);
+            var forwardXZ = new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z);
+            PushParticlesAroundAxis(center, forwardXZ, camera.transform.right, inputForce);
         }
         if (Input.GetKey(KeyCode.S)) // DOWN
         {
-            PushParticlesAroundAxis(center, -pivotAxis, inputForce);
+            var forwardXZ = new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z);
+            PushParticlesAroundAxis(center, -forwardXZ, -camera.transform.right, inputForce);
         }
-        
-//        if (Input.GetKey(KeyCode.Space)) // JUMP
-//        {
-//            foreach (var s in jumpSprings)
-//            {
-////                s.
-//            }
-//        }
+        if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow))
+        {
+            var rightXZ = new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
+            PushParticlesAroundAxis(center, -rightXZ, camera.transform.forward, inputForce);
+        }
+        if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.RightArrow))
+        {
+            var rightXZ = new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
+            PushParticlesAroundAxis(center, rightXZ, -camera.transform.forward, inputForce);
+
+        }
+        //        if (Input.GetKey(KeyCode.Space)) // JUMP
+        //        {
+        //            foreach (var s in jumpSprings)
+        //            {
+        ////                s.
+        //            }
+        //        }
     }
 
     private void LateUpdate()
@@ -147,10 +157,9 @@ public class VickySphere : MonoBehaviour
     {
         camera.transform.RotateAround(centerPoint, Vector3.up, direction);
         cameraVector = Quaternion.AngleAxis(direction, Vector3.up) * cameraVector;
-        pivotAxis = Quaternion.AngleAxis(direction, Vector3.up) * pivotAxis;
     }
 
-    private void PushParticlesAroundAxis(Vector3 centerPoint, Vector3 axis, float force)
+    private void PushParticlesAroundAxis(Vector3 centerPoint, Vector3 mvmtDir, Vector3 axis, float force)
     {
         for(int i = 0; i < particles.Length; i++)
         {
@@ -168,6 +177,7 @@ public class VickySphere : MonoBehaviour
             {
                 rigidbodies[i].AddForce(Time.fixedDeltaTime * force * direction);
                 rigidbodies[i].AddTorque(Time.fixedDeltaTime * force * direction);
+                rigidbodies[i].AddForce(Time.fixedDeltaTime * force * 0.4f * mvmtDir);
             }
         }
     }
