@@ -85,8 +85,6 @@ public class VickySphere : MonoBehaviour
         }
 
         center = posSum / vertices.Length;
-//        Debug.Log("Center: "+center);
-//        transform.position = center;
 
         mesh.vertices = vertices;
         mesh.RecalculateNormals();
@@ -98,22 +96,18 @@ public class VickySphere : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.A)) // LEFT
         {
-//            ApplyForceToParticles(Vector3.left, inputForce);
             RotateCamera(center, -rotationSpeed);
         }
         if (Input.GetKey(KeyCode.D)) // RIGHT
         {
-//            ApplyForceToParticles(Vector3.right, inputForce);
             RotateCamera(center, rotationSpeed);
         }
         if (Input.GetKey(KeyCode.W)) // UP
         {
-//            ApplyForceToParticles(Vector3.forward, inputForce);
             PushParticlesAroundAxis(center, pivotAxis, inputForce);
         }
         if (Input.GetKey(KeyCode.S)) // DOWN
         {
-//            ApplyForceToParticles(Vector3.back, inputForce);
             PushParticlesAroundAxis(center, -pivotAxis, inputForce);
         }
         
@@ -153,8 +147,6 @@ public class VickySphere : MonoBehaviour
         camera.transform.RotateAround(centerPoint, Vector3.up, direction);
         cameraVector = Quaternion.AngleAxis(direction, Vector3.up) * cameraVector;
         pivotAxis = Quaternion.AngleAxis(direction, Vector3.up) * pivotAxis;
-        
-        Debug.DrawLine(centerPoint, centerPoint + pivotAxis * 10, Color.magenta);
     }
 
     private void PushParticlesAroundAxis(Vector3 centerPoint, Vector3 axis, float force)
@@ -164,15 +156,10 @@ public class VickySphere : MonoBehaviour
             var p = particles[i];
             
             var particlePoint = p.transform.position;
-//            Debug.DrawLine(particlePoint, particlePoint * 0.99f, Color.red);
             var vectorFromCenter = particlePoint - centerPoint;
-//            Debug.DrawLine(centerPoint, centerPoint + vectorFromCenter * 2, Color.red);
             var projectedPoint = Vector3.Project(vectorFromCenter, axis) + centerPoint;
-//            Debug.DrawLine(projectedPoint, projectedPoint * 0.99f, Color.red);
             var vectorFromProjected = particlePoint - projectedPoint;
-//            Debug.DrawLine(projectedPoint, projectedPoint + vectorFromProjected * 2, Color.red);
             var direction = Vector3.Cross(axis, vectorFromProjected).normalized;
-//            Debug.DrawLine(particlePoint, particlePoint + direction * 2, Color.red);
 
             rigidbodies[i].AddForce(Time.fixedDeltaTime * force * direction);
         }
