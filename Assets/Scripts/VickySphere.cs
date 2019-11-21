@@ -41,7 +41,7 @@ public class VickySphere : MonoBehaviour
 
         for (int i = 0; i < vertices.Length; i++)
         {
-            var pos1 = transform.TransformPoint(vertices[i]);
+            var pos1 = transform.TransformPoint(vertices[i]) + transform.position;
             particles[i] = Instantiate(particle, pos1, Quaternion.identity, transform);
             rigidbodies[i] = particles[i].GetComponent<Rigidbody>();
         }
@@ -65,12 +65,14 @@ public class VickySphere : MonoBehaviour
                 }
             }
         }
+
+        cameraVector = camera.transform.position - transform.position;
         
         transform.position = Vector3.zero;
         transform.rotation = Quaternion.identity;
         transform.localScale = Vector3.one;
 
-        cameraVector = camera.transform.position - transform.position;
+        var translate = transform.position;
     }
 
     // Update is called once per frame
