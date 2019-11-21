@@ -24,6 +24,7 @@ public class VickySphere : MonoBehaviour
     private GameObject[] particles;
     private Rigidbody[] rigidbodies;
     public Vector3 center { get; private set; }
+    public GameObject anchorParticle { get; private set; }
 
     private Vector3 cameraVector;
     
@@ -72,7 +73,8 @@ public class VickySphere : MonoBehaviour
         transform.rotation = Quaternion.identity;
         transform.localScale = Vector3.one;
 
-        var translate = transform.position;
+        //make anchor
+        anchorParticle = Instantiate(particle, center, Quaternion.identity, transform);
     }
 
     // Update is called once per frame
@@ -86,6 +88,9 @@ public class VickySphere : MonoBehaviour
         }
 
         center = posSum / vertices.Length;
+        anchorParticle.transform.position = center;
+        anchorParticle.transform.forward = particles[0].transform.position - center;
+
 
         mesh.vertices = vertices;
         mesh.RecalculateNormals();
