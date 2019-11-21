@@ -49,10 +49,10 @@ MonoBehaviour:
   camera: {fileID: 0}
   minThreshold: 1
   maxThreshold: 1.7
-  springDampening: 2
-  springStrength: 50
-  inputForce: 100
-  rotationSpeed: 7
+  springDampening: 10
+  springStrength: 170
+  inputForce: 1200
+  camRotationSpeed: 8
   maxSpin: 15
 --- !u!1001 &3308091450409411102
 PrefabInstance:
