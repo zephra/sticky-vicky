@@ -14,7 +14,8 @@ public class VickySphere : MonoBehaviour
     public float springStrength = 10f;
     [Space]
     public float inputForce = 10;
-    public float rotationSpeed = 10;
+    public float camRotationSpeed = 10;
+    public float maxSpin = 15;
     
     private Mesh mesh;
     private Vector3[] vertices;
@@ -96,11 +97,11 @@ public class VickySphere : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.A)) // LEFT
         {
-            RotateCamera(center, -rotationSpeed);
+            RotateCamera(center, -camRotationSpeed);
         }
         if (Input.GetKey(KeyCode.D)) // RIGHT
         {
-            RotateCamera(center, rotationSpeed);
+            RotateCamera(center, camRotationSpeed);
         }
         if (Input.GetKey(KeyCode.W)) // UP
         {
@@ -161,7 +162,13 @@ public class VickySphere : MonoBehaviour
             var vectorFromProjected = particlePoint - projectedPoint;
             var direction = Vector3.Cross(axis, vectorFromProjected).normalized;
 
-            rigidbodies[i].AddForce(Time.fixedDeltaTime * force * direction);
+            var magnitudeInDir = Vector3.Dot(rigidbodies[i].velocity, direction);
+            
+            if (magnitudeInDir < maxSpin)
+            {
+                rigidbodies[i].AddForce(Time.fixedDeltaTime * force * direction);
+                rigidbodies[i].AddTorque(Time.fixedDeltaTime * force * direction);
+            }
         }
     }
 }
