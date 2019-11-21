@@ -40,11 +40,18 @@ public class VickySphere : MonoBehaviour
         
         Debug.Log("Mesh been loaded fo sho, "+vertices.Length+" vertices");
 
+        var posSum = Vector3.zero;
         for (int i = 0; i < vertices.Length; i++)
         {
             var pos1 = transform.TransformPoint(vertices[i]) + transform.position;
             particles[i] = Instantiate(particle, pos1, Quaternion.identity, transform);
             rigidbodies[i] = particles[i].GetComponent<Rigidbody>();
+            posSum += pos1;
+        }
+        center = posSum / vertices.Length;
+        foreach (GameObject p in particles)
+        {
+            p.transform.forward = center - p.transform.position;
         }
 
         for (int i = 0; i < particles.Length; i++)
@@ -183,7 +190,7 @@ public class VickySphere : MonoBehaviour
             if (magnitudeInDir < maxSpin)
             {
                 rigidbodies[i].AddForce(Time.fixedDeltaTime * force * direction);
-                rigidbodies[i].AddTorque(Time.fixedDeltaTime * force * direction);
+                //rigidbodies[i].AddTorque(Time.fixedDeltaTime * force * direction);
                 rigidbodies[i].AddForce(Time.fixedDeltaTime * force * 0.4f * mvmtDir);
             }
         }

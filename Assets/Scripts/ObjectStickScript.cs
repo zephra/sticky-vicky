@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ObjectStickScript : MonoBehaviour
 {
-    private FixedJoint myJoint = null;
+    private Joint myJoint = null;
 
     private FixedJoint AddJoint(GameObject vickyParticle)
     {
@@ -28,6 +28,6 @@ public class ObjectStickScript : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (myJoint == null && other.name.StartsWith("Particle"))
-            myJoint = AddJoint(other.transform.parent.gameObject.GetComponent<VickySphere>().anchorParticle);
+            myJoint = AddJoint(other.gameObject);//other.transform.parent.gameObject.GetComponent<VickySphere>().anchorParticle);
     }
 }
