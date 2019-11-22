@@ -9,15 +9,15 @@ public class Controls : MonoBehaviour
     public float inputAccel = 10;
     public float camRotationSpeed = 10;
     
-//    public UnityEvent onSpaceDown;
-//    public UnityEvent onSpaceUp;
+    public UnityEvent onSpaceDown;
+    public UnityEvent onSpaceUp;
     
     public FloatEvent onInputUp;
     public FloatEvent onInputDown;
     public FloatEvent onInputRight;
     public FloatEvent onInputLeft;
 
-//    private bool spaceDown;
+    private bool spaceDown;
     
     [System.Serializable]
     public class FloatEvent : UnityEvent<float> { }
@@ -38,12 +38,12 @@ public class Controls : MonoBehaviour
         if (onInputLeft == null)
             onInputLeft = new FloatEvent();
         
-//        if (onSpaceDown == null)
-//            onSpaceDown = new UnityEvent();
-//        if (onSpaceUp == null)
-//            onSpaceUp = new UnityEvent();
-//
-//        spaceDown = false;
+        if (onSpaceDown == null)
+            onSpaceDown = new UnityEvent();
+        if (onSpaceUp == null)
+            onSpaceUp = new UnityEvent();
+
+        spaceDown = false;
     }
 
     public void SaveCameraPosition()
@@ -79,7 +79,16 @@ public class Controls : MonoBehaviour
             onInputRight.Invoke(inputAccel);
         }
         
-//        Debug.Log("Space down? "+Input.GetKey(KeyCode.Space));
+        if (Input.GetKeyDown(KeyCode.Space)) // SPACE DOWN
+        {
+            onSpaceDown.Invoke();
+            spaceDown = true;
+        }
+        if (spaceDown && !Input.GetKey(KeyCode.Space)) // SPACE UP
+        {
+            onSpaceUp.Invoke();
+            spaceDown = false;
+        }
     }
     
     private void LateUpdate()

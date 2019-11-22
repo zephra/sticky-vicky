@@ -42,23 +42,6 @@ public class VickySolidSphere : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) // SPACE
-        {
-//            onSpaceDown.Invoke();
-            StartExplodeCharge();
-            spaceDown = true;
-//            Debug.Log("Space down");
-        }
-
-        if (spaceDown && !Input.GetKey(KeyCode.Space))
-        {
-//            onSpaceUp.Invoke();
-            ReleaseExplodeCharge();
-            spaceDown = false;
-//            Debug.Log("Space up");
-        }
-        
-//        if (chargeTime >= 0) Debug.Log("Charge time: "+chargeTime);
         if (chargeTime >= 0 && chargeTime < maxChargeTime) chargeTime += Time.fixedDeltaTime;
         if (chargeTime > maxChargeTime) chargeTime = maxChargeTime;
     }
@@ -87,11 +70,11 @@ public class VickySolidSphere : MonoBehaviour
         RotateSphereAroundAxis(rightXZ, -camera.transform.forward, accel);
     }
 
-    private void StartExplodeCharge()
+    public void StartExplodeCharge()
     {
         if (chargeTime < 0) chargeTime = 0;
     }
-    private void ReleaseExplodeCharge()
+    public void ReleaseExplodeCharge()
     {
         if (chargeTime >= minChargeTime)
         {
