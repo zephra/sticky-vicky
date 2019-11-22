@@ -9,8 +9,11 @@ public class VickySolidSphere : MonoBehaviour
     public Controls controls;
     public GameObject chargeParticles;
     [Space]
+    public float massRotateBonus = 2.1f;
+    public float slideMultiplier = 0.1f;
     public float maxSpin = 15;
 
+    [Space]
     public float maxChargeTime = 2;
     public float minChargeTime = 0.3f;
     public float chargeCooldownTime = 0.5f;
@@ -18,8 +21,10 @@ public class VickySolidSphere : MonoBehaviour
     public float chargeMultiplier = 5;
     public float massFactor = 1.5f;
     
+    [Space]
     public List<GameObject> stickedObjects;
     public List<Joint> joints;
+
 
     private Rigidbody rb;
 
@@ -128,10 +133,10 @@ public class VickySolidSphere : MonoBehaviour
             totalMass += obj.GetComponent<Rigidbody>().mass;
         }
 
-        var baseForce = accel * accel * totalMass * Time.fixedDeltaTime;
+        var baseForce = accel * totalMass * Time.fixedDeltaTime;
         //TODO add max spin?
-        rb.AddTorque(baseForce * totalMass * axis);
-        rb.AddForce(baseForce * 0.2f * movementDirection);
+        rb.AddTorque(baseForce * (1 + massRotateBonus * totalMass) * axis);
+        rb.AddForce(baseForce * slideMultiplier * movementDirection);
         
     }
     

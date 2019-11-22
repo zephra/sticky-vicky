@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class Controls : MonoBehaviour
 {
     public Camera camera;
-    public float inputAccel = 10;
+    public float inputAccel = 500;
     public float camRotationSpeed = 10;
     
     public UnityEvent onSpaceDown;

@@ -45,7 +45,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.02
+  m_AngularDrag: 0.03
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -66,6 +66,8 @@ MonoBehaviour:
   camera: {fileID: 0}
   controls: {fileID: 2663758282204705407}
   chargeParticles: {fileID: 0}
+  massRotateBonus: 2.1
+  slideMultiplier: 0.18
   maxSpin: 15
   maxChargeTime: 2
   minChargeTime: 0.3
@@ -88,7 +90,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 0}
-  inputAccel: 70
+  inputAccel: 700
   camRotationSpeed: 8
   onSpaceDown:
     m_PersistentCalls:
