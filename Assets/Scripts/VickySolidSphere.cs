@@ -32,28 +32,28 @@ public class VickySolidSphere : MonoBehaviour
         controls.center = transform.position;
     }
 
-    public void InputUp(float force)
+    public void InputUp(float accel)
     {
         var forwardXZ = new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z);
-        RotateSphereAroundAxis(forwardXZ, camera.transform.right, force);
+        RotateSphereAroundAxis(forwardXZ, camera.transform.right, accel);
     }
 
-    public void InputDown(float force)
+    public void InputDown(float accel)
     {
         var forwardXZ = new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z);
-        RotateSphereAroundAxis(-forwardXZ, -camera.transform.right, force);
+        RotateSphereAroundAxis(-forwardXZ, -camera.transform.right, accel);
     }
 
-    public void InputLeft(float force)
+    public void InputLeft(float accel)
     {
         var rightXZ = new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
-        RotateSphereAroundAxis(-rightXZ, camera.transform.forward, force);
+        RotateSphereAroundAxis(-rightXZ, camera.transform.forward, accel);
     }
 
-    public void InputRight(float force)
+    public void InputRight(float accel)
     {
         var rightXZ = new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
-        RotateSphereAroundAxis(rightXZ, -camera.transform.forward, force);
+        RotateSphereAroundAxis(rightXZ, -camera.transform.forward, accel);
     }
 
 //    private SpringJoint AddSpring(GameObject particle1, GameObject particle2, float dampening, float spring)
@@ -65,17 +65,27 @@ public class VickySolidSphere : MonoBehaviour
 //        return springJoint;
 //    }
 
-    private void RotateSphereAroundAxis(Vector3 movementDirection, Vector3 axis, float force)
+    private void RotateSphereAroundAxis(Vector3 movementDirection, Vector3 axis, float accel)
     {
-        rb.AddTorque(force * Time.fixedDeltaTime * axis);
-        rb.AddForce(force * Time.fixedDeltaTime * movementDirection);
+        //get total mass to calculate force needed for rotational acceleration
+        var totalMass = rb.mass;
+        foreach(GameObject obj in stickedObjects)
+        {
+            totalMass += obj.GetComponent<Rigidbody>().mass;
+        }
+
+        var baseForce = accel * accel * totalMass * Time.fixedDeltaTime;
+        //TODO add max spin?
+        rb.AddTorque(baseForce * totalMass * axis);
+        rb.AddForce(baseForce * 0.2f * movementDirection);
+        
     }
     
     public void AttachObject(ObjectStickScript objectScript)
     {
         if (stickedObjects.Contains(objectScript.gameObject)) return;
 //        objectScript.rb.isKinematic = true;
-        objectScript.rb.mass *= 0.01f;
+        //objectScript.rb.mass *= 0.01f;
 //        objectScript.transform.SetParent(transform);
 //        stickedObjects.Add(objectScript.gameObject);
 //        AddSpringJoint(objectScript.rb);

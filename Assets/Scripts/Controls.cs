@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class Controls : MonoBehaviour
 {
     public Camera camera;
-    public float inputForce = 10;
+    public float inputAccel = 10;
     public float camRotationSpeed = 10;
     
     public FloatEvent onInputUp;
@@ -52,19 +52,19 @@ public class Controls : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.W)) // UP
         {
-            onInputUp.Invoke(inputForce);
+            onInputUp.Invoke(inputAccel);
         }
         if (Input.GetKey(KeyCode.S)) // DOWN
         {
-            onInputDown.Invoke(inputForce);
+            onInputDown.Invoke(inputAccel);
         }
         if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow))
         {
-            onInputLeft.Invoke(inputForce);
+            onInputLeft.Invoke(inputAccel);
         }
         if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.RightArrow))
         {
-            onInputRight.Invoke(inputForce);
+            onInputRight.Invoke(inputAccel);
         }
         //        if (Input.GetKey(KeyCode.Space)) // JUMP
         //        {
