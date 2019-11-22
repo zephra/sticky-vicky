@@ -32,7 +32,7 @@ public class VickySolidSphere : MonoBehaviour
     private float chargeTime;
     private bool spaceDown;
     private float chargeCooldown;
-    private Vector3 savedForce = Vector3.zero;
+    private bool doExplosionLater;
 
     
     // Start is called before the first frame update
@@ -66,12 +66,37 @@ public class VickySolidSphere : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (savedForce != Vector3.zero)
+        if (doExplosionLater)
         {
-            rb.AddForce(savedForce);
-            savedForce = Vector3.zero;
+            var force = chargeForce + chargeForce * chargeTime * chargeMultiplier;
+
+            //jump up a bit
+            var totalForce = Vector3.zero;
+            totalForce += force * 0.12f * Vector3.up;
+
+            foreach (var script in stickedObjects)
+            {
+                var dir = (script.transform.position - transform.position).normalized;
+                var massMultiplier = script.rb.mass * massFactor;
+                var finalForce = force + force * massMultiplier;
+                script.rb.AddForce(finalForce * dir);
+                totalForce += finalForce * -dir;
+                //                Debug.DrawLine(transform.position, transform.position + dir * 5, Color.red, 2);
+                //                Debug.Log("Launching stuff with "+Mathf.Min(finalForce, maxVickyPushForce)+" force!");
+                script.stuckToVicky = false;
+            }
+            stickedObjects.Clear();
+
+            //minimise total force
+            rb.AddForce(Math.Min(totalForce.magnitude, maxVickyPushForce) * totalForce.normalized);
+
+            //Debug.DrawLine(transform.position, transform.position + totalForce * 5, Color.red, 2);
+
+            chargeCooldown = chargeCooldownTime;
+            chargeTime = -1;
+            doExplosionLater = false;
         }
-    }
+    }        
 
     public void InputRotate(Vector3 dir, Vector3 axis, float accel)
     {
@@ -87,6 +112,7 @@ public class VickySolidSphere : MonoBehaviour
         }
         
     }
+
     public void ReleaseExplodeCharge()
     {
         if (chargeTime >= minChargeTime)
@@ -96,34 +122,8 @@ public class VickySolidSphere : MonoBehaviour
                 Destroy(j);
             }
             joints.Clear();
-            
-            var force = chargeForce + chargeForce * chargeTime * chargeMultiplier;
-
-            //jump up a bit
-            var totalForce = Vector3.zero;
-            totalForce += force * 0.12f * Vector3.up;
-
-            foreach (var script in stickedObjects)
-            {
-                var dir = (script.transform.position - transform.position).normalized;
-                var massMultiplier = script.rb.mass * massFactor;
-                var finalForce = force + force * massMultiplier;
-                script.rb.AddForce( finalForce  * dir);
-                totalForce += finalForce * -dir;
-//                Debug.DrawLine(transform.position, transform.position + dir * 5, Color.red, 2);
-//                Debug.Log("Launching stuff with "+Mathf.Min(finalForce, maxVickyPushForce)+" force!");
-                script.stuckToVicky = false;
-            }
-            stickedObjects.Clear();
-
-            //minimise total force
-            savedForce = Math.Min(totalForce.magnitude, maxVickyPushForce) * totalForce.normalized;
-            
-            //Debug.DrawLine(transform.position, transform.position + totalForce * 5, Color.red, 2);
-
-            chargeCooldown = chargeCooldownTime;
+            doExplosionLater = true;
         }
-        chargeTime = -1;
         chargeParticles.SetActive(false);
     }
 
