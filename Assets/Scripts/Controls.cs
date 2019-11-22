@@ -73,12 +73,12 @@ public class Controls : MonoBehaviour
         if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow)) // LEFT
         {
             direction += new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
-            thumbAxis += camera.transform.right;
+            thumbAxis += camera.transform.forward;
         }
         if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.RightArrow))
         {
             direction -= new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
-            thumbAxis -= camera.transform.right;
+            thumbAxis -= camera.transform.forward;
         }
         if (Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.UpArrow)) // BLEFT
         {

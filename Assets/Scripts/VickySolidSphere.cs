@@ -32,6 +32,7 @@ public class VickySolidSphere : MonoBehaviour
     private float chargeTime;
     private bool spaceDown;
     private float chargeCooldown;
+    private Vector3 savedForce = Vector3.zero;
 
     
     // Start is called before the first frame update
@@ -63,6 +64,15 @@ public class VickySolidSphere : MonoBehaviour
         if (chargeCooldown > 0) chargeCooldown -= Time.fixedDeltaTime;
     }
 
+    private void LateUpdate()
+    {
+        if (savedForce != Vector3.zero)
+        {
+            rb.AddForce(savedForce);
+            savedForce = Vector3.zero;
+        }
+    }
+
     public void InputRotate(Vector3 dir, Vector3 axis, float accel)
     {
         RotateSphereAroundAxis(dir, axis, accel);
@@ -90,7 +100,8 @@ public class VickySolidSphere : MonoBehaviour
             var force = chargeForce + chargeForce * chargeTime * chargeMultiplier;
 
             //jump up a bit
-            rb.AddForce(Mathf.Min(force, maxVickyPushForce) * 0.2f * Vector3.up);
+            var totalForce = Vector3.zero;
+            totalForce += force * 0.12f * Vector3.up;
 
             foreach (var script in stickedObjects)
             {
@@ -98,12 +109,17 @@ public class VickySolidSphere : MonoBehaviour
                 var massMultiplier = script.rb.mass * massFactor;
                 var finalForce = force + force * massMultiplier;
                 script.rb.AddForce( finalForce  * dir);
-                rb.AddForce(Mathf.Min(finalForce, maxVickyPushForce) * -dir);
+                totalForce += finalForce * -dir;
 //                Debug.DrawLine(transform.position, transform.position + dir * 5, Color.red, 2);
 //                Debug.Log("Launching stuff with "+Mathf.Min(finalForce, maxVickyPushForce)+" force!");
                 script.stuckToVicky = false;
             }
             stickedObjects.Clear();
+
+            //minimise total force
+            savedForce = Math.Min(totalForce.magnitude, maxVickyPushForce) * totalForce.normalized;
+            
+            //Debug.DrawLine(transform.position, transform.position + totalForce * 5, Color.red, 2);
 
             chargeCooldown = chargeCooldownTime;
         }
