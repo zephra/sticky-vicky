@@ -73,8 +73,9 @@ MonoBehaviour:
   minChargeTime: 0.3
   chargeCooldownTime: 0.5
   chargeForce: 1000
-  chargeMultiplier: 2
-  massFactor: 0.3
+  chargeMultiplier: 2.5
+  massFactor: 0.7
+  maxVickyPushForce: 6000
   stickedObjects: []
   joints: []
 --- !u!114 &2663758282204705407

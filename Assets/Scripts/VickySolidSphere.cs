@@ -20,6 +20,7 @@ public class VickySolidSphere : MonoBehaviour
     public float chargeForce = 500;
     public float chargeMultiplier = 5;
     public float massFactor = 1.5f;
+    public float maxVickyPushForce = 2000;
 
     [Space]
     public List<ObjectStickScript> stickedObjects;
@@ -111,9 +112,11 @@ public class VickySolidSphere : MonoBehaviour
             {
                 var dir = (script.transform.position - transform.position).normalized;
                 var massMultiplier = script.rb.mass * massFactor;
-                script.rb.AddForce( (force + force * massMultiplier)  * dir);
-                rb.AddForce((force + force * massMultiplier) * -dir);
+                var finalForce = force + force * massMultiplier;
+                script.rb.AddForce( finalForce  * dir);
+                rb.AddForce(Mathf.Min(finalForce, maxVickyPushForce) * -dir);
 //                Debug.DrawLine(transform.position, transform.position + dir * 5, Color.red, 2);
+//                Debug.Log("Launching stuff with "+Mathf.Min(finalForce, maxVickyPushForce)+" force!");
                 script.stuckToVicky = false;
             }
             stickedObjects.Clear();
