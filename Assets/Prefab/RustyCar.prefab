@@ -64,7 +64,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 2.1
-  m_Height: 7.2
+  m_Height: 6.2
   m_Direction: 0
   m_Center: {x: 0.8, y: -0.2, z: 0}
 --- !u!65 &1438459780671982582
@@ -78,7 +78,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 8.2, y: 2.2, z: 5.5}
+  m_Size: {x: 7.6, y: 1.8, z: 4.4}
   m_Center: {x: 0, y: -1.3, z: 0}
 --- !u!136 &7069622387719683275
 CapsuleCollider:
@@ -91,7 +91,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 2
-  m_Height: 7
+  m_Height: 6
   m_Direction: 0
   m_Center: {x: 0.8, y: -0.2, z: 0}
 --- !u!65 &2683433476158452130
@@ -105,7 +105,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 8, y: 2, z: 5.5}
+  m_Size: {x: 7.4, y: 1.7, z: 4.3}
   m_Center: {x: 0, y: -1.3, z: 0}
 --- !u!114 &6399088035838265077
 MonoBehaviour:
@@ -121,6 +121,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
   vicky: {fileID: 0}
+  stuckToVicky: 0
 --- !u!1001 &1431312154732882904
 PrefabInstance:
   m_ObjectHideFlags: 0
