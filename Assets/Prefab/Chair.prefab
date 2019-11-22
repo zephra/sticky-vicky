@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3143660336499229946}
   m_Layer: 0
   m_Name: Chair
-  m_TagString: Untagged
+  m_TagString: Sticky
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104,6 +104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
+  vicky: {fileID: 0}
 --- !u!1001 &7795050961881261359
 PrefabInstance:
   m_ObjectHideFlags: 0

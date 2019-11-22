@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 6399088035838265077}
   m_Layer: 0
   m_Name: RustyCar
-  m_TagString: Untagged
+  m_TagString: Sticky
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
+  vicky: {fileID: 0}
 --- !u!1001 &1431312154732882904
 PrefabInstance:
   m_ObjectHideFlags: 0

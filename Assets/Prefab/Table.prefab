@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: -538223734827452746}
   m_Layer: 0
   m_Name: Table
-  m_TagString: Untagged
+  m_TagString: Sticky
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -146,6 +146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
+  vicky: {fileID: 0}
 --- !u!1001 &6765884181020091842
 PrefabInstance:
   m_ObjectHideFlags: 0

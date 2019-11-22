@@ -20,9 +20,9 @@ public class VickySolidSphere : MonoBehaviour
     public float chargeForce = 500;
     public float chargeMultiplier = 5;
     public float massFactor = 1.5f;
-    
+
     [Space]
-    public List<GameObject> stickedObjects;
+    public List<ObjectStickScript> stickedObjects;
     public List<Joint> joints;
 
 
@@ -107,14 +107,14 @@ public class VickySolidSphere : MonoBehaviour
             joints.Clear();
             
             var force = chargeForce + chargeForce * chargeTime * chargeMultiplier;
-            foreach (var go in stickedObjects)
+            foreach (var script in stickedObjects)
             {
-                var dir = (go.transform.position - transform.position).normalized;
-                var goRB = go.GetComponent<Rigidbody>();
-                var massMultiplier = goRB.mass * massFactor;
-                goRB.AddForce( (force + force * massMultiplier)  * dir);
+                var dir = (script.transform.position - transform.position).normalized;
+                var massMultiplier = script.rb.mass * massFactor;
+                script.rb.AddForce( (force + force * massMultiplier)  * dir);
                 rb.AddForce((force + force * massMultiplier) * -dir);
-                Debug.DrawLine(transform.position, transform.position + dir * 5, Color.red, 2);
+//                Debug.DrawLine(transform.position, transform.position + dir * 5, Color.red, 2);
+                script.stuckToVicky = false;
             }
             stickedObjects.Clear();
 
@@ -128,8 +128,9 @@ public class VickySolidSphere : MonoBehaviour
     {
         //get total mass to calculate force needed for rotational acceleration
         var totalMass = rb.mass;
-        foreach(GameObject obj in stickedObjects)
+        foreach(ObjectStickScript script in stickedObjects)
         {
+            var obj = script.gameObject;
             totalMass += obj.GetComponent<Rigidbody>().mass;
         }
 
@@ -140,17 +141,26 @@ public class VickySolidSphere : MonoBehaviour
         
     }
     
+    public void AttachObjectToAnother(ObjectStickScript anchorScript, ObjectStickScript extendedScript)
+    {
+        if (chargeCooldown > 0 || !stickedObjects.Contains(anchorScript) || stickedObjects.Contains(extendedScript)) return;
+        AddFixedJoint(anchorScript.gameObject, extendedScript.rb);
+        stickedObjects.Add(extendedScript);
+        extendedScript.stuckToVicky = true;
+    }
+    
     public void AttachObject(ObjectStickScript objectScript)
     {
-        if (chargeCooldown > 0 || stickedObjects.Contains(objectScript.gameObject)) return;
-        AddFixedJoint(objectScript.rb);
+        if (chargeCooldown > 0 || stickedObjects.Contains(objectScript)) return;
+        AddFixedJoint(gameObject, objectScript.rb);
+        stickedObjects.Add(objectScript);
+        objectScript.stuckToVicky = true;
     }
 
-    public Joint AddFixedJoint(Rigidbody otherRB)
+    public Joint AddFixedJoint(GameObject anchor, Rigidbody extendedRB)
     {
-        var joint = gameObject.AddComponent<FixedJoint>();
-        joint.connectedBody = otherRB;
-        stickedObjects.Add(otherRB.gameObject);
+        var joint = anchor.AddComponent<FixedJoint>();
+        joint.connectedBody = extendedRB;
         joints.Add(joint);
         return joint;
     }
