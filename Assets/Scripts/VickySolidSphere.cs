@@ -3,19 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VickySphere : MonoBehaviour
+public class VickySolidSphere : MonoBehaviour
 {
     public GameObject particle;
     public Camera camera;
-    public Controls controls;
     [Space]
     public float minThreshold = 0.3f;
     public float maxThreshold = 0.99f;
     public float springDampening = 0.75f;
     public float springStrength = 10f;
     [Space]
-//    public float inputForce = 10;
-//    public float camRotationSpeed = 10;
+    public float inputForce = 10;
+    public float camRotationSpeed = 10;
     public float maxSpin = 15;
     
     private Mesh mesh;
@@ -25,10 +24,10 @@ public class VickySphere : MonoBehaviour
     private GameObject[] particles;
     private Rigidbody[] rigidbodies;
     public List<GameObject> stickedObjects;
-//    public Vector3 center { get; private set; }
+    public Vector3 center { get; private set; }
     public GameObject anchorParticle { get; private set; }
 
-//    private Vector3 cameraVector;
+    private Vector3 cameraVector;
     
     // Start is called before the first frame update
     void Start()
@@ -50,12 +49,12 @@ public class VickySphere : MonoBehaviour
             rigidbodies[i] = particles[i].GetComponent<Rigidbody>();
             posSum += pos1;
         }
-        controls.center = posSum / vertices.Length;
+        center = posSum / vertices.Length;
         //make anchor
-        anchorParticle = Instantiate(particle, controls.center, Quaternion.identity, transform);
+        anchorParticle = Instantiate(particle, center, Quaternion.identity, transform);
         foreach (GameObject p in particles)
         {
-            p.transform.forward = controls.center - p.transform.position;
+            p.transform.forward = center - p.transform.position;
             AddSpring(p, anchorParticle, springDampening, springStrength);
 
         }
@@ -80,8 +79,7 @@ public class VickySphere : MonoBehaviour
             }
         }
 
-//        cameraVector = GetComponent<Camera>().transform.position - transform.position;
-        controls.SaveCameraPosition();
+        cameraVector = camera.transform.position - transform.position;
         
         transform.position = Vector3.zero;
         transform.rotation = Quaternion.identity;
@@ -98,7 +96,7 @@ public class VickySphere : MonoBehaviour
             posSum += vertices[i];
         }
 
-        controls.center = posSum / vertices.Length;
+        center = posSum / vertices.Length;
         //anchorParticle.transform.position = center;
         //anchorParticle.transform.forward = particles[0].transform.position - center;
 
@@ -111,35 +109,35 @@ public class VickySphere : MonoBehaviour
 
     private void FixedUpdate()
     {
-//        if (Input.GetKey(KeyCode.A)) // LEFT
-//        {
-//            RotateCamera(center, -camRotationSpeed);
-//        }
-//        if (Input.GetKey(KeyCode.D)) // RIGHT
-//        {
-//            RotateCamera(center, camRotationSpeed);
-//        }
-//        if (Input.GetKey(KeyCode.W)) // UP
-//        {
-//            var forwardXZ = new Vector3(GetComponent<Camera>().transform.forward.x, 0, GetComponent<Camera>().transform.forward.z);
-//            PushParticlesAroundAxis(center, forwardXZ, GetComponent<Camera>().transform.right, inputForce);
-//        }
-//        if (Input.GetKey(KeyCode.S)) // DOWN
-//        {
-//            var forwardXZ = new Vector3(GetComponent<Camera>().transform.forward.x, 0, GetComponent<Camera>().transform.forward.z);
-//            PushParticlesAroundAxis(center, -forwardXZ, -GetComponent<Camera>().transform.right, inputForce);
-//        }
-//        if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow))
-//        {
-//            var rightXZ = new Vector3(GetComponent<Camera>().transform.right.x, 0, GetComponent<Camera>().transform.right.z);
-//            PushParticlesAroundAxis(center, -rightXZ, GetComponent<Camera>().transform.forward, inputForce);
-//        }
-//        if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.RightArrow))
-//        {
-//            var rightXZ = new Vector3(GetComponent<Camera>().transform.right.x, 0, GetComponent<Camera>().transform.right.z);
-//            PushParticlesAroundAxis(center, rightXZ, -GetComponent<Camera>().transform.forward, inputForce);
-//
-//        }
+        if (Input.GetKey(KeyCode.A)) // LEFT
+        {
+            RotateCamera(center, -camRotationSpeed);
+        }
+        if (Input.GetKey(KeyCode.D)) // RIGHT
+        {
+            RotateCamera(center, camRotationSpeed);
+        }
+        if (Input.GetKey(KeyCode.W)) // UP
+        {
+            var forwardXZ = new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z);
+            PushParticlesAroundAxis(center, forwardXZ, camera.transform.right, inputForce);
+        }
+        if (Input.GetKey(KeyCode.S)) // DOWN
+        {
+            var forwardXZ = new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z);
+            PushParticlesAroundAxis(center, -forwardXZ, -camera.transform.right, inputForce);
+        }
+        if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow))
+        {
+            var rightXZ = new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
+            PushParticlesAroundAxis(center, -rightXZ, camera.transform.forward, inputForce);
+        }
+        if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.RightArrow))
+        {
+            var rightXZ = new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
+            PushParticlesAroundAxis(center, rightXZ, -camera.transform.forward, inputForce);
+
+        }
         //        if (Input.GetKey(KeyCode.Space)) // JUMP
         //        {
         //            foreach (var s in jumpSprings)
@@ -149,34 +147,10 @@ public class VickySphere : MonoBehaviour
         //        }
     }
 
-    public void InputUp(float force)
+    private void LateUpdate()
     {
-        var forwardXZ = new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z);
-        PushParticlesAroundAxis(controls.center, forwardXZ, camera.transform.right, force);
+        camera.transform.position = center + cameraVector;
     }
-
-    public void InputDown(float force)
-    {
-        var forwardXZ = new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z);
-        PushParticlesAroundAxis(controls.center, -forwardXZ, -camera.transform.right, force);
-    }
-
-    public void InputLeft(float force)
-    {
-        var rightXZ = new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
-        PushParticlesAroundAxis(controls.center, -rightXZ, camera.transform.forward, force);
-    }
-
-    public void InputRight(float force)
-    {
-        var rightXZ = new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
-        PushParticlesAroundAxis(controls.center, rightXZ, -camera.transform.forward, force);
-    }
-
-//    private void LateUpdate()
-//    {
-//        GetComponent<Camera>().transform.position = center + cameraVector;
-//    }
 
     private SpringJoint AddSpring(GameObject particle1, GameObject particle2, float dampening, float spring)
     {
@@ -187,19 +161,19 @@ public class VickySphere : MonoBehaviour
         return springJoint;
     }
 
-//    private void ApplyForceToParticles(Vector3 direction, float force)
-//    {
-//        foreach (GameObject p in particles)
-//        {
-//            p.GetComponent<Rigidbody>().AddForce(Time.fixedDeltaTime * force * direction);
-//        }
-//    }
+    private void ApplyForceToParticles(Vector3 direction, float force)
+    {
+        foreach (GameObject p in particles)
+        {
+            p.GetComponent<Rigidbody>().AddForce(Time.fixedDeltaTime * force * direction);
+        }
+    }
 
-//    private void RotateCamera(Vector3 centerPoint, float direction)
-//    {
-//        GetComponent<Camera>().transform.RotateAround(centerPoint, Vector3.up, direction);
-//        cameraVector = Quaternion.AngleAxis(direction, Vector3.up) * cameraVector;
-//    }
+    private void RotateCamera(Vector3 centerPoint, float direction)
+    {
+        camera.transform.RotateAround(centerPoint, Vector3.up, direction);
+        cameraVector = Quaternion.AngleAxis(direction, Vector3.up) * cameraVector;
+    }
 
     private void PushParticlesAroundAxis(Vector3 centerPoint, Vector3 mvmtDir, Vector3 axis, float force)
     {

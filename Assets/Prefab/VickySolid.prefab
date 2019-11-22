@@ -9,10 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3308091450554102349}
-  - component: {fileID: 3308091450554102348}
-  - component: {fileID: 2663758282204705407}
+  - component: {fileID: 6285879139778112300}
   m_Layer: 0
-  m_Name: Vicky
+  m_Name: VickySolid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3308091450554102348
+--- !u!114 &6285879139778112300
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,90 +41,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 3308091450554102350}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2fc7ea942d16437c849d8547455106f, type: 3}
+  m_Script: {fileID: 11500000, guid: 2bfad2fef53a847a1aa9e0b6e325dd88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particle: {fileID: 6978694958024970224, guid: 93e9171ce11b84ca6988471bee065256,
-    type: 3}
-  controls: {fileID: 2663758282204705407}
-  minThreshold: 1
-  maxThreshold: 1.7
-  springDampening: 100
-  springStrength: 1700
+  particle: {fileID: 0}
+  camera: {fileID: 0}
+  minThreshold: 0.3
+  maxThreshold: 0.99
+  springDampening: 0.75
+  springStrength: 10
+  inputForce: 10
+  camRotationSpeed: 10
   maxSpin: 15
   stickedObjects: []
---- !u!114 &2663758282204705407
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3308091450554102350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fa8ba8e693194243b28485a89464b14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  camera: {fileID: 0}
-  inputForce: 600
-  camRotationSpeed: 8
-  onInputUp:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3308091450554102348}
-        m_MethodName: InputUp
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onInputDown:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3308091450554102348}
-        m_MethodName: InputDown
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onInputRight:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3308091450554102348}
-        m_MethodName: InputRight
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onInputLeft:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3308091450554102348}
-        m_MethodName: InputLeft
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  center: {x: 0, y: 0, z: 0}
 --- !u!1001 &3308091450409411102
 PrefabInstance:
   m_ObjectHideFlags: 0

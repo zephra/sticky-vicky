@@ -2296,6 +2296,11 @@ PrefabInstance:
       propertyPath: springMinDistance
       value: 1000
       objectReference: {fileID: 0}
+    - target: {fileID: 2663758282204705407, guid: a4699c0f1be7d4618907e832e22eb1b1,
+        type: 3}
+      propertyPath: camera
+      value: 
+      objectReference: {fileID: 963194227}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a4699c0f1be7d4618907e832e22eb1b1, type: 3}
 --- !u!1001 &6765884181300339929
