@@ -9,10 +9,16 @@ public class VickySolidSphere : MonoBehaviour
     public Controls controls;
     [Space]
     public float maxSpin = 15;
+
+    public float maxChargeTime = 2;
+    public float minChargeTime = 0.3f;
     
     public List<GameObject> stickedObjects;
 
     private Rigidbody rb;
+
+    private float chargeTime;
+    private bool spaceDown;
 
     
     // Start is called before the first frame update
@@ -24,12 +30,37 @@ public class VickySolidSphere : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         controls.SaveCameraPosition();
+
+        chargeTime = -1;
     }
 
     // Update is called once per frame
     void Update()
     {
         controls.center = transform.position;
+    }
+
+    private void FixedUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.Space)) // SPACE
+        {
+//            onSpaceDown.Invoke();
+            StartExplodeCharge();
+            spaceDown = true;
+//            Debug.Log("Space down");
+        }
+
+        if (spaceDown && !Input.GetKey(KeyCode.Space))
+        {
+//            onSpaceUp.Invoke();
+            ReleaseExplodeCharge();
+            spaceDown = false;
+//            Debug.Log("Space up");
+        }
+        
+//        if (chargeTime >= 0) Debug.Log("Charge time: "+chargeTime);
+        if (chargeTime >= 0 && chargeTime < maxChargeTime) chargeTime += Time.fixedDeltaTime;
+        if (chargeTime > maxChargeTime) chargeTime = maxChargeTime;
     }
 
     public void InputUp(float accel)
@@ -56,14 +87,18 @@ public class VickySolidSphere : MonoBehaviour
         RotateSphereAroundAxis(rightXZ, -camera.transform.forward, accel);
     }
 
-//    private SpringJoint AddSpring(GameObject particle1, GameObject particle2, float dampening, float spring)
-//    {
-//        var springJoint = particle1.AddComponent<SpringJoint>();
-//        springJoint.connectedBody = particle2.GetComponent<Rigidbody>();
-//        springJoint.damper = dampening;
-//        springJoint.spring = spring;
-//        return springJoint;
-//    }
+    private void StartExplodeCharge()
+    {
+        if (chargeTime < 0) chargeTime = 0;
+    }
+    private void ReleaseExplodeCharge()
+    {
+        if (chargeTime >= minChargeTime)
+        {
+            Debug.Log("Release!! "+chargeTime);
+        }
+        chargeTime = -1;
+    }
 
     private void RotateSphereAroundAxis(Vector3 movementDirection, Vector3 axis, float accel)
     {
@@ -92,15 +127,6 @@ public class VickySolidSphere : MonoBehaviour
         AddFixedJoint(objectScript.rb);
     }
 
-//    public Joint AddSpringJoint(Rigidbody otherRB)
-//    {
-//        var joint = gameObject.AddComponent<SpringJoint>();
-//        joint.connectedBody = otherRB;
-//        joint.damper = 10;
-//        joint.spring = 10;
-//        stickedObjects.Add(otherRB.gameObject);
-//        return joint;
-//    }
     public Joint AddFixedJoint(Rigidbody otherRB)
     {
         var joint = gameObject.AddComponent<FixedJoint>();

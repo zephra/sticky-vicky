@@ -9,10 +9,15 @@ public class Controls : MonoBehaviour
     public float inputAccel = 10;
     public float camRotationSpeed = 10;
     
+//    public UnityEvent onSpaceDown;
+//    public UnityEvent onSpaceUp;
+    
     public FloatEvent onInputUp;
     public FloatEvent onInputDown;
     public FloatEvent onInputRight;
     public FloatEvent onInputLeft;
+
+//    private bool spaceDown;
     
     [System.Serializable]
     public class FloatEvent : UnityEvent<float> { }
@@ -32,6 +37,13 @@ public class Controls : MonoBehaviour
             onInputRight = new FloatEvent();
         if (onInputLeft == null)
             onInputLeft = new FloatEvent();
+        
+//        if (onSpaceDown == null)
+//            onSpaceDown = new UnityEvent();
+//        if (onSpaceUp == null)
+//            onSpaceUp = new UnityEvent();
+//
+//        spaceDown = false;
     }
 
     public void SaveCameraPosition()
@@ -42,11 +54,11 @@ public class Controls : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.A)) // LEFT
+        if (Input.GetKey(KeyCode.A)) // CAMERA LEFT
         {
             RotateCamera(center, -camRotationSpeed);
         }
-        if (Input.GetKey(KeyCode.D)) // RIGHT
+        if (Input.GetKey(KeyCode.D)) // CAMERA RIGHT
         {
             RotateCamera(center, camRotationSpeed);
         }
@@ -58,7 +70,7 @@ public class Controls : MonoBehaviour
         {
             onInputDown.Invoke(inputAccel);
         }
-        if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow)) // LEFT
         {
             onInputLeft.Invoke(inputAccel);
         }
@@ -66,13 +78,8 @@ public class Controls : MonoBehaviour
         {
             onInputRight.Invoke(inputAccel);
         }
-        //        if (Input.GetKey(KeyCode.Space)) // JUMP
-        //        {
-        //            foreach (var s in jumpSprings)
-        //            {
-        ////                s.
-        //            }
-        //        }
+        
+//        Debug.Log("Space down? "+Input.GetKey(KeyCode.Space));
     }
     
     private void LateUpdate()
