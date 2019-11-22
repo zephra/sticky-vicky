@@ -7,6 +7,7 @@ public class VickySolidSphere : MonoBehaviour
 {
     public Camera camera;
     public Controls controls;
+    public GameObject chargeParticles;
     [Space]
     public float maxSpin = 15;
 
@@ -32,12 +33,14 @@ public class VickySolidSphere : MonoBehaviour
         controls.SaveCameraPosition();
 
         chargeTime = -1;
+        chargeParticles.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
         controls.center = transform.position;
+        chargeParticles.transform.position = transform.position;
     }
 
     private void FixedUpdate()
@@ -72,7 +75,12 @@ public class VickySolidSphere : MonoBehaviour
 
     public void StartExplodeCharge()
     {
-        if (chargeTime < 0) chargeTime = 0;
+        if (chargeTime < 0)
+        {
+            chargeTime = 0;
+            chargeParticles.SetActive(true);
+        }
+        
     }
     public void ReleaseExplodeCharge()
     {
@@ -81,6 +89,7 @@ public class VickySolidSphere : MonoBehaviour
             Debug.Log("Release!! "+chargeTime);
         }
         chargeTime = -1;
+        chargeParticles.SetActive(false);
     }
 
     private void RotateSphereAroundAxis(Vector3 movementDirection, Vector3 axis, float accel)
