@@ -8,16 +8,17 @@ public class ObjectStickScript : MonoBehaviour
 
     private FixedJoint AddFixedJoint(GameObject vickyParticle)
     {
-        var fixedJoint = gameObject.AddComponent<FixedJoint>();
-        fixedJoint.connectedBody = vickyParticle.GetComponent<Rigidbody>();
+        var fixedJoint = vickyParticle.AddComponent<FixedJoint>();
+        fixedJoint.connectedBody = GetComponent<Rigidbody>();
+        fixedJoint.enableCollision = true;
         return fixedJoint;
     }
     private SpringJoint AddSpringJoint(GameObject vickyParticle)
     {
-        var springJoint = gameObject.AddComponent<SpringJoint>();
-        springJoint.connectedBody = vickyParticle.GetComponent<Rigidbody>();
+        var springJoint = vickyParticle.AddComponent<SpringJoint>();
+        springJoint.connectedBody = GetComponent<Rigidbody>();
         springJoint.damper = 10;
-        springJoint.spring = 100;
+        springJoint.spring = 40;
         return springJoint;
     }
 
@@ -38,7 +39,7 @@ public class ObjectStickScript : MonoBehaviour
         if (myJoint == null && other.name.StartsWith("Particle"))
         {
             VickySphere vicky = other.transform.parent.gameObject.GetComponent<VickySphere>();
-            myJoint = AddFixedJoint(other.gameObject);
+            myJoint = AddFixedJoint(vicky.anchorParticle);// other.gameObject);
             AddSpringJoint(vicky.anchorParticle);
             vicky.stickedObjects.Add(gameObject);
         }

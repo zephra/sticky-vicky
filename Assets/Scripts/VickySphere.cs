@@ -13,7 +13,7 @@ public class VickySphere : MonoBehaviour
     public float springDampening = 0.75f;
     public float springStrength = 10f;
     [Space]
-    public float inputForce = 10;
+    public float inputAccel = 10;
     public float camRotationSpeed = 10;
     public float maxSpin = 15;
     
@@ -120,22 +120,22 @@ public class VickySphere : MonoBehaviour
         if (Input.GetKey(KeyCode.W)) // UP
         {
             var forwardXZ = new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z);
-            PushParticlesAroundAxis(center, forwardXZ, camera.transform.right, inputForce);
+            PushParticlesAroundAxis(center, forwardXZ, camera.transform.right, inputAccel);
         }
         if (Input.GetKey(KeyCode.S)) // DOWN
         {
             var forwardXZ = new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z);
-            PushParticlesAroundAxis(center, -forwardXZ, -camera.transform.right, inputForce);
+            PushParticlesAroundAxis(center, -forwardXZ, -camera.transform.right, inputAccel);
         }
         if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow))
         {
             var rightXZ = new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
-            PushParticlesAroundAxis(center, -rightXZ, camera.transform.forward, inputForce);
+            PushParticlesAroundAxis(center, -rightXZ, camera.transform.forward, inputAccel);
         }
         if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.RightArrow))
         {
             var rightXZ = new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
-            PushParticlesAroundAxis(center, rightXZ, -camera.transform.forward, inputForce);
+            PushParticlesAroundAxis(center, rightXZ, -camera.transform.forward, inputAccel);
 
         }
         //        if (Input.GetKey(KeyCode.Space)) // JUMP
@@ -160,6 +160,12 @@ public class VickySphere : MonoBehaviour
         springJoint.spring = spring;
         return springJoint;
     }
+    private FixedJoint AddFixedJoint(GameObject particle1, GameObject particle2, float dampening, float spring)
+    {
+        var fixedJoint = particle1.AddComponent<FixedJoint>();
+        fixedJoint.connectedBody = particle2.GetComponent<Rigidbody>();
+        return fixedJoint;
+    }
 
     private void ApplyForceToParticles(Vector3 direction, float force)
     {
@@ -175,7 +181,7 @@ public class VickySphere : MonoBehaviour
         cameraVector = Quaternion.AngleAxis(direction, Vector3.up) * cameraVector;
     }
 
-    private void PushParticlesAroundAxis(Vector3 centerPoint, Vector3 mvmtDir, Vector3 axis, float force)
+    private void PushParticlesAroundAxis(Vector3 centerPoint, Vector3 mvmtDir, Vector3 axis, float accel)
     {
         for(int i = 0; i < particles.Length; i++)
         {
@@ -191,9 +197,10 @@ public class VickySphere : MonoBehaviour
             
             if (magnitudeInDir < maxSpin)
             {
-                rigidbodies[i].AddForce(Time.fixedDeltaTime * force * direction);
+                var forceToAdd = Time.fixedDeltaTime * accel * accel * rigidbodies[i].mass;
+                rigidbodies[i].AddForce(forceToAdd * direction);
                 //rigidbodies[i].AddTorque(Time.fixedDeltaTime * force * direction);
-                rigidbodies[i].AddForce(Time.fixedDeltaTime * force * 0.4f * mvmtDir);
+                rigidbodies[i].AddForce(forceToAdd * 0.4f * mvmtDir);
             }
         }
         foreach (GameObject obj in stickedObjects)
@@ -209,8 +216,9 @@ public class VickySphere : MonoBehaviour
 
             if (magnitudeInDir < maxSpin)
             {
-                body.AddForce(Time.fixedDeltaTime * force * direction);
-                body.AddForce(Time.fixedDeltaTime * force * 0.4f * mvmtDir);
+                var forceToAdd = Time.fixedDeltaTime * accel * accel * body.mass;
+                body.AddForce(forceToAdd * direction);
+                body.AddForce(forceToAdd * 0.4f * mvmtDir);
             }
 
         }

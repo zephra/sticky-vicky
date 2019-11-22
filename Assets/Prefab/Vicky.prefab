@@ -49,9 +49,9 @@ MonoBehaviour:
   camera: {fileID: 0}
   minThreshold: 1
   maxThreshold: 1.7
-  springDampening: 100
-  springStrength: 1700
-  inputForce: 600
+  springDampening: 20
+  springStrength: 560
+  inputAccel: 20
   camRotationSpeed: 8
   maxSpin: 15
   stickedObjects: []
