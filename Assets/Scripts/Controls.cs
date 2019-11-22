@@ -17,7 +17,6 @@ public class Controls : MonoBehaviour
     [System.Serializable]
     public class FloatEvent : UnityEvent<float> { }
     
-//    public Vector3 center { get; private set; }
     [HideInInspector] public Vector3 center;
     
     private Vector3 cameraVector;
@@ -33,8 +32,6 @@ public class Controls : MonoBehaviour
             onInputRight = new FloatEvent();
         if (onInputLeft == null)
             onInputLeft = new FloatEvent();
-        
-//        cameraVector = GetComponent<Camera>().transform.position - transform.position;
     }
 
     public void SaveCameraPosition()
@@ -55,28 +52,27 @@ public class Controls : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.W)) // UP
         {
-//            var forwardXZ = new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z);
-//            PushParticlesAroundAxis(center, forwardXZ, camera.transform.right, inputForce);
             onInputUp.Invoke(inputForce);
         }
         if (Input.GetKey(KeyCode.S)) // DOWN
         {
-//            var forwardXZ = new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z);
-//            PushParticlesAroundAxis(center, -forwardXZ, -camera.transform.right, inputForce);
             onInputDown.Invoke(inputForce);
         }
         if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow))
         {
-//            var rightXZ = new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
-//            PushParticlesAroundAxis(center, -rightXZ, camera.transform.forward, inputForce);
             onInputLeft.Invoke(inputForce);
         }
         if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.RightArrow))
         {
-//            var rightXZ = new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
-//            PushParticlesAroundAxis(center, rightXZ, -camera.transform.forward, inputForce);
             onInputRight.Invoke(inputForce);
         }
+        //        if (Input.GetKey(KeyCode.Space)) // JUMP
+        //        {
+        //            foreach (var s in jumpSprings)
+        //            {
+        ////                s.
+        //            }
+        //        }
     }
     
     private void LateUpdate()
