@@ -6,6 +6,8 @@ public class ObjectStickScript : MonoBehaviour
 {
     private Joint myJoint = null;
 
+    [HideInInspector] public Rigidbody rb;
+
     private FixedJoint AddFixedJoint(GameObject vickyParticle)
     {
         var fixedJoint = gameObject.AddComponent<FixedJoint>();
@@ -24,7 +26,7 @@ public class ObjectStickScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -41,6 +43,12 @@ public class ObjectStickScript : MonoBehaviour
             myJoint = AddFixedJoint(other.gameObject);
             AddSpringJoint(vicky.anchorParticle);
             vicky.stickedObjects.Add(gameObject);
+        }
+
+        if (myJoint == null && other.CompareTag("Player"))
+        {
+//            myJoint = other.GetComponent<VickySolidSphere>().AttachJoint(rb);
+            other.GetComponent<VickySolidSphere>().AttachObject(this);
         }
     }
 }
