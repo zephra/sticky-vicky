@@ -100,7 +100,6 @@ public class VickySolidSphere : MonoBehaviour
     {
         if (chargeTime >= minChargeTime)
         {
-//            Debug.Log("Release!! "+chargeTime);
             foreach (var j in joints)
             {
                 Destroy(j);
