@@ -65,10 +65,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 0}
   controls: {fileID: 2663758282204705407}
+  chargeParticles: {fileID: 0}
   maxSpin: 15
   maxChargeTime: 2
   minChargeTime: 0.3
+  chargeCooldownTime: 0.5
+  chargeForce: 1000
+  chargeMultiplier: 2
+  massFactor: 0.3
   stickedObjects: []
+  joints: []
 --- !u!114 &2663758282204705407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82,7 +88,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 0}
-  inputAccel: 45
+  inputAccel: 70
   camRotationSpeed: 8
   onSpaceDown:
     m_PersistentCalls:

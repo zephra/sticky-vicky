@@ -79,7 +79,7 @@ public class Controls : MonoBehaviour
             onInputRight.Invoke(inputAccel);
         }
         
-        if (Input.GetKeyDown(KeyCode.Space)) // SPACE DOWN
+        if (!spaceDown && Input.GetKey(KeyCode.Space)) // SPACE DOWN
         {
             onSpaceDown.Invoke();
             spaceDown = true;

@@ -13,13 +13,19 @@ public class VickySolidSphere : MonoBehaviour
 
     public float maxChargeTime = 2;
     public float minChargeTime = 0.3f;
+    public float chargeCooldownTime = 0.5f;
+    public float chargeForce = 500;
+    public float chargeMultiplier = 5;
+    public float massFactor = 1.5f;
     
     public List<GameObject> stickedObjects;
+    public List<Joint> joints;
 
     private Rigidbody rb;
 
     private float chargeTime;
     private bool spaceDown;
+    private float chargeCooldown;
 
     
     // Start is called before the first frame update
@@ -33,6 +39,7 @@ public class VickySolidSphere : MonoBehaviour
         controls.SaveCameraPosition();
 
         chargeTime = -1;
+        chargeCooldown = 0;
         chargeParticles.SetActive(false);
     }
 
@@ -47,6 +54,7 @@ public class VickySolidSphere : MonoBehaviour
     {
         if (chargeTime >= 0 && chargeTime < maxChargeTime) chargeTime += Time.fixedDeltaTime;
         if (chargeTime > maxChargeTime) chargeTime = maxChargeTime;
+        if (chargeCooldown > 0) chargeCooldown -= Time.fixedDeltaTime;
     }
 
     public void InputUp(float accel)
@@ -86,7 +94,26 @@ public class VickySolidSphere : MonoBehaviour
     {
         if (chargeTime >= minChargeTime)
         {
-            Debug.Log("Release!! "+chargeTime);
+//            Debug.Log("Release!! "+chargeTime);
+            foreach (var j in joints)
+            {
+                Destroy(j);
+            }
+            joints.Clear();
+            
+            var force = chargeForce + chargeForce * chargeTime * chargeMultiplier;
+            foreach (var go in stickedObjects)
+            {
+                var dir = (go.transform.position - transform.position).normalized;
+                var goRB = go.GetComponent<Rigidbody>();
+                var massMultiplier = goRB.mass * massFactor;
+                goRB.AddForce( (force + force * massMultiplier)  * dir);
+                rb.AddForce((force + force * massMultiplier) * -dir);
+                Debug.DrawLine(transform.position, transform.position + dir * 5, Color.red, 2);
+            }
+            stickedObjects.Clear();
+
+            chargeCooldown = chargeCooldownTime;
         }
         chargeTime = -1;
         chargeParticles.SetActive(false);
@@ -110,12 +137,7 @@ public class VickySolidSphere : MonoBehaviour
     
     public void AttachObject(ObjectStickScript objectScript)
     {
-        if (stickedObjects.Contains(objectScript.gameObject)) return;
-//        objectScript.rb.isKinematic = true;
-        //objectScript.rb.mass *= 0.01f;
-//        objectScript.transform.SetParent(transform);
-//        stickedObjects.Add(objectScript.gameObject);
-//        AddSpringJoint(objectScript.rb);
+        if (chargeCooldown > 0 || stickedObjects.Contains(objectScript.gameObject)) return;
         AddFixedJoint(objectScript.rb);
     }
 
@@ -124,6 +146,7 @@ public class VickySolidSphere : MonoBehaviour
         var joint = gameObject.AddComponent<FixedJoint>();
         joint.connectedBody = otherRB;
         stickedObjects.Add(otherRB.gameObject);
+        joints.Add(joint);
         return joint;
     }
 }
