@@ -12,16 +12,16 @@ public class Controls : MonoBehaviour
     public UnityEvent onSpaceDown;
     public UnityEvent onSpaceUp;
     
-    public FloatEvent onInputUp;
-    public FloatEvent onInputDown;
-    public FloatEvent onInputRight;
-    public FloatEvent onInputLeft;
+    public RotateEvent onRotateInput;
 
     private bool spaceDown;
-    
+
     [System.Serializable]
     public class FloatEvent : UnityEvent<float> { }
-    
+
+    [System.Serializable]
+    public class RotateEvent : UnityEvent<Vector3, Vector3, float> { }
+
     [HideInInspector] public Vector3 center;
     
     private Vector3 cameraVector;
@@ -29,14 +29,8 @@ public class Controls : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        if (onInputUp == null)
-            onInputUp = new FloatEvent();
-        if (onInputDown == null)
-            onInputDown = new FloatEvent();
-        if (onInputRight == null)
-            onInputRight = new FloatEvent();
-        if (onInputLeft == null)
-            onInputLeft = new FloatEvent();
+        if (onRotateInput == null)
+            onRotateInput = new RotateEvent();
         
         if (onSpaceDown == null)
             onSpaceDown = new UnityEvent();
@@ -62,23 +56,44 @@ public class Controls : MonoBehaviour
         {
             RotateCamera(center, camRotationSpeed);
         }
+
+
+        Vector3 direction = Vector3.zero;
+        Vector3 thumbAxis = Vector3.zero;
         if (Input.GetKey(KeyCode.W)) // UP
         {
-            onInputUp.Invoke(inputAccel);
+            direction += new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z);
+            thumbAxis += camera.transform.right;
         }
         if (Input.GetKey(KeyCode.S)) // DOWN
         {
-            onInputDown.Invoke(inputAccel);
+            direction -= new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z);
+            thumbAxis -= camera.transform.right;
         }
         if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow)) // LEFT
         {
-            onInputLeft.Invoke(inputAccel);
+            direction += new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
+            thumbAxis += camera.transform.right;
         }
         if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.RightArrow))
         {
-            onInputRight.Invoke(inputAccel);
+            direction -= new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
+            thumbAxis -= camera.transform.right;
         }
-        
+        if (Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.UpArrow)) // BLEFT
+        {
+            thumbAxis += Vector3.down;
+        }
+        if (Input.GetKey(KeyCode.C) || Input.GetKey(KeyCode.DownArrow))
+        {
+            thumbAxis += Vector3.up;
+        }
+        direction = direction.normalized;
+        thumbAxis = thumbAxis.normalized;
+        if (direction + thumbAxis != Vector3.zero)
+            onRotateInput.Invoke(direction, thumbAxis, inputAccel);
+
+
         if (!spaceDown && Input.GetKey(KeyCode.Space)) // SPACE DOWN
         {
             onSpaceDown.Invoke();

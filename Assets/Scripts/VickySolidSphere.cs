@@ -63,28 +63,9 @@ public class VickySolidSphere : MonoBehaviour
         if (chargeCooldown > 0) chargeCooldown -= Time.fixedDeltaTime;
     }
 
-    public void InputUp(float accel)
+    public void InputRotate(Vector3 dir, Vector3 axis, float accel)
     {
-        var forwardXZ = new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z);
-        RotateSphereAroundAxis(forwardXZ, camera.transform.right, accel);
-    }
-
-    public void InputDown(float accel)
-    {
-        var forwardXZ = new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z);
-        RotateSphereAroundAxis(-forwardXZ, -camera.transform.right, accel);
-    }
-
-    public void InputLeft(float accel)
-    {
-        var rightXZ = new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
-        RotateSphereAroundAxis(-rightXZ, camera.transform.forward, accel);
-    }
-
-    public void InputRight(float accel)
-    {
-        var rightXZ = new Vector3(camera.transform.right.x, 0, camera.transform.right.z);
-        RotateSphereAroundAxis(rightXZ, -camera.transform.forward, accel);
+        RotateSphereAroundAxis(dir, axis, accel);
     }
 
     public void StartExplodeCharge()
@@ -107,6 +88,10 @@ public class VickySolidSphere : MonoBehaviour
             joints.Clear();
             
             var force = chargeForce + chargeForce * chargeTime * chargeMultiplier;
+
+            //jump up a bit
+            rb.AddForce(Mathf.Min(force, maxVickyPushForce) * 0.2f * Vector3.up);
+
             foreach (var script in stickedObjects)
             {
                 var dir = (script.transform.position - transform.position).normalized;
