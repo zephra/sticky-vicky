@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 7385500841607777267}
   - component: {fileID: 6250887164630977570}
   - component: {fileID: 4730711645971249423}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cat
   m_TagString: Sticky
   m_Icon: {fileID: 0}
