@@ -38,10 +38,6 @@ public class FishScript : MonoBehaviour
     private void Update()
     {
         var moveForce = Vector3.zero;
-//        var randomCat = cats[Random.Range(0, cats.Count)];
-//        var randomIndex = Random.Range(0, cats.Count);
-
-//        var minDist = 0f;
         
         for(int i = 0; i < cats.Count; i++)
         {
@@ -52,20 +48,7 @@ public class FishScript : MonoBehaviour
             if (distance > forgetRadius)
             {
                 forgetCats.Add(cat);
-//                continue;
             }
-            
-//            if (distance < minDist)
-//            {
-//                minDist = distance;
-//            }
-
-//            if (randomIndex == i && !chosenCat)
-//            {
-////                var dirNorm = direction.normalized;
-////                moveForce += dirNorm * fleeForce;
-//                chosenCat = cat;
-//            }
         }
 
         foreach (var cat in forgetCats)
@@ -78,32 +61,12 @@ public class FishScript : MonoBehaviour
         }
         forgetCats.Clear();
 
-//        if (chosenCat && (transform.position - chosenCat.transform.position).magnitude <= minDist)
-//            chosenCat = null;
-//
-//        if (!chosenCat && cats.Count > 0)
-//        {
-//            var randomIndex = 0;
-//            if (cats.Count > 1)
-//            {
-//                var dist = 0f;
-//                do
-//                {
-//                    randomIndex = Random.Range(0, cats.Count);
-//                    dist = (transform.position - cats[randomIndex].transform.position).magnitude;
-//                } while (dist <= minDist);
-//            }
-//
-//            chosenCat = cats[randomIndex];
-//        }
-
         if (chooseTimer > 0)
             chooseTimer -= Time.deltaTime;
         
         if ((!chosenCat || chooseTimer <= 0) && cats.Count > 0)
         {
             var index = Random.Range(0, cats.Count);
-//            Debug.Log(gameObject.name +": cats count: "+cats.Count+", index: "+index);
             chosenCat = cats[index];
             chooseTimer = Random.Range(chooseTimeMin, chooseTimeMax);
         }
@@ -133,7 +96,6 @@ public class FishScript : MonoBehaviour
         var size = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, results, fleeFromLayer);
         if (size > 0)
         {
-//            Debug.Log("Near cat!?, collider length: "+results.Length+", collider 1: "+results[0].gameObject.name);
             var cat = results[0].gameObject.GetComponent<ObjectStickScript>();
             if (!cats.Contains(cat))
             {
