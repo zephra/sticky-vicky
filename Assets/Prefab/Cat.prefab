@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 7385500841607777267}
   - component: {fileID: 6250887164630977570}
   - component: {fileID: 4730711645971249423}
+  - component: {fileID: 4283662316843435203}
   m_Layer: 9
   m_Name: Cat
   m_TagString: Sticky
@@ -178,6 +179,27 @@ MonoBehaviour:
   rb: {fileID: 0}
   vicky: {fileID: 0}
   stuckToVicky: 0
+--- !u!114 &4283662316843435203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3037885633539055740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f655b1453bad6490b80b6f89a7e8ac92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stickyScript: {fileID: 4730711645971249423}
+  fleeFromLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  fleeWhileSticked: 0
+  detectionRadius: 40
+  forgetRadius: 120
+  fleeForce: -25
+  maxForce: 200
 --- !u!1001 &187775480792962033
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6741872665006345994}
   - component: {fileID: 2249638558346127864}
   - component: {fileID: 2954949273720219335}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GoodFish
   m_TagString: Sticky
   m_Icon: {fileID: 0}
@@ -138,11 +138,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stickyScript: {fileID: 2249638558346127864}
+  fleeFromLayer:
+    serializedVersion: 2
+    m_Bits: 512
   fleeWhileSticked: 0
   detectionRadius: 20
   forgetRadius: 50
-  fleeForce: 150
-  maxForce: 300
+  fleeForce: 100
+  maxForce: 200
 --- !u!1001 &9145142813911220166
 PrefabInstance:
   m_ObjectHideFlags: 0

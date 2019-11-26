@@ -6,8 +6,9 @@ using UnityEngine;
 public class FishScript : MonoBehaviour
 {
     public ObjectStickScript stickyScript;
+    public LayerMask fleeFromLayer;
     public bool fleeWhileSticked = false;
-    
+
     public float detectionRadius = 5;
     public float forgetRadius = 20;
     public float fleeForce = 500;
@@ -50,6 +51,9 @@ public class FishScript : MonoBehaviour
         }
         if (fleeWhileSticked || !stickyScript.stuckToVicky)
             stickyScript.rb.AddForce(moveForce);
+        
+        if (!fleeWhileSticked && stickyScript.stuckToVicky)
+            cats.Clear();
 
         foreach (var cat in forgetCats)
         {
@@ -60,7 +64,7 @@ public class FishScript : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        var size = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, results, LayerMask.GetMask("Cat"));
+        var size = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, results, fleeFromLayer);
         if (size > 0)
         {
 //            Debug.Log("Near cat!?, collider length: "+results.Length+", collider 1: "+results[0].gameObject.name);
