@@ -131,6 +131,7 @@ public class VickySolidSphere : MonoBehaviour
     {
         //get total mass to calculate force needed for rotational acceleration
         var totalMass = rb.mass;
+//        var totalMass = 0f;
         foreach(ObjectStickScript script in stickedObjects)
         {
             var obj = script.gameObject;
