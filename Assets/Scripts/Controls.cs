@@ -58,10 +58,13 @@ public class Controls : MonoBehaviour
             RotateCamera(center, camRotationSpeed);
         }
 
-        if (Input.GetKeyDown(KeyCode.Backspace))
+        if (Input.GetKeyDown(KeyCode.Alpha9))
         {
-            Scene scene = SceneManager.GetActiveScene();
-            SceneManager.LoadScene(scene.name);
+            SceneManager.LoadScene("MainScene");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            SceneManager.LoadScene("CatFishBattlefield");
         }
 
 
