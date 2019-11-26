@@ -66,13 +66,13 @@ MonoBehaviour:
   camera: {fileID: 0}
   controls: {fileID: 2663758282204705407}
   chargeParticles: {fileID: 0}
-  massRotateBonus: 2.5
+  massRotateBonus: 4.7
   slideMultiplier: 0.18
   maxSpin: 15
   maxChargeTime: 2
   minChargeTime: 0.3
   chargeCooldownTime: 0.5
-  chargeForce: 1000
+  chargeForce: 500
   chargeMultiplier: 1.8
   massFactor: 0.7
   maxVickyPushForce: 2500

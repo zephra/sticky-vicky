@@ -134,13 +134,35 @@ public class VickySolidSphere : MonoBehaviour
 //        var totalMass = 0f;
         foreach(ObjectStickScript script in stickedObjects)
         {
-            var obj = script.gameObject;
-            totalMass += obj.GetComponent<Rigidbody>().mass;
+            totalMass += script.rb.mass;
+
         }
 
         var baseForce = accel * totalMass * Time.fixedDeltaTime;
+        var torque = baseForce * (1 + massRotateBonus * totalMass);
+        //Debug.Log("torque = " + torque);
+
+        //help push the objects around a little, don't rely on torque too much
+        foreach (ObjectStickScript script in stickedObjects)
+        {
+            var particlePoint = script.transform.position;
+            var vectorFromCenter = particlePoint - transform.position;
+            var projectedPoint = Vector3.Project(vectorFromCenter, axis) + transform.position;
+            var vectorFromProjected = particlePoint - projectedPoint;
+            var direction = Vector3.Cross(axis, vectorFromProjected).normalized;
+
+            var body = script.rb;
+            var magnitudeInDir = Vector3.Dot(body.velocity, direction);
+
+            Debug.DrawLine(script.transform.position, script.transform.position + direction*3);
+            if (magnitudeInDir < maxSpin)
+            {
+                body.AddForce(Time.fixedDeltaTime * torque *0.08f * direction);
+            }
+        }
+
         //TODO add max spin?
-        rb.AddTorque(baseForce * (1 + massRotateBonus * totalMass) * axis);
+        rb.AddTorque( torque * axis);
         rb.AddForce(baseForce * slideMultiplier * movementDirection);
         
     }
