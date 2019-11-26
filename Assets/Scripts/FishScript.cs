@@ -50,7 +50,7 @@ public class FishScript : MonoBehaviour
             moveForce = moveForce.normalized * maxForce;
         }
         if (fleeWhileSticked || !stickyScript.stuckToVicky)
-            stickyScript.rb.AddForce(moveForce);
+            stickyScript.rb.AddForce(Time.deltaTime * moveForce);
         
         if (!fleeWhileSticked && stickyScript.stuckToVicky)
             cats.Clear();

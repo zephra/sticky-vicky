@@ -144,8 +144,8 @@ MonoBehaviour:
   fleeWhileSticked: 0
   detectionRadius: 20
   forgetRadius: 50
-  fleeForce: 100
-  maxForce: 200
+  fleeForce: 1500
+  maxForce: 2000
 --- !u!1001 &9145142813911220166
 PrefabInstance:
   m_ObjectHideFlags: 0

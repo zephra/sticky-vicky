@@ -196,10 +196,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   fleeWhileSticked: 0
-  detectionRadius: 40
+  detectionRadius: 60
   forgetRadius: 120
-  fleeForce: -25
-  maxForce: 200
+  fleeForce: -2000
+  maxForce: 3000
 --- !u!1001 &187775480792962033
 PrefabInstance:
   m_ObjectHideFlags: 0
