@@ -137,10 +137,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f655b1453bad6490b80b6f89a7e8ac92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stickyScript: {fileID: 2249638558346127864}
+  fleeWhileSticked: 0
   detectionRadius: 20
-  forgetRadius: 40
-  fleeForce: 500
-  maxForce: 2000
+  forgetRadius: 50
+  fleeForce: 150
+  maxForce: 300
 --- !u!1001 &9145142813911220166
 PrefabInstance:
   m_ObjectHideFlags: 0

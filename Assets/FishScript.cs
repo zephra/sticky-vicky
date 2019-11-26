@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class FishScript : MonoBehaviour
 {
+    public ObjectStickScript stickyScript;
+    public bool fleeWhileSticked = false;
+    
     public float detectionRadius = 5;
     public float forgetRadius = 20;
     public float fleeForce = 500;
@@ -13,7 +16,6 @@ public class FishScript : MonoBehaviour
     private Collider[] results;
     private List<ObjectStickScript> cats;
     private List<ObjectStickScript> forgetCats;
-    private Rigidbody rb;
 
     // Start is called before the first frame update
     void Start()
@@ -22,8 +24,6 @@ public class FishScript : MonoBehaviour
         
         cats = new List<ObjectStickScript>();
         forgetCats = new List<ObjectStickScript>();
-
-        rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
@@ -48,7 +48,8 @@ public class FishScript : MonoBehaviour
         {
             moveForce = moveForce.normalized * maxForce;
         }
-        rb.AddForce(moveForce);
+        if (fleeWhileSticked || !stickyScript.stuckToVicky)
+            stickyScript.rb.AddForce(moveForce);
 
         foreach (var cat in forgetCats)
         {
@@ -62,7 +63,7 @@ public class FishScript : MonoBehaviour
         var size = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, results, LayerMask.GetMask("Cat"));
         if (size > 0)
         {
-            Debug.Log("Near cat!?, collider length: "+results.Length+", collider 1: "+results[0].gameObject.name);
+//            Debug.Log("Near cat!?, collider length: "+results.Length+", collider 1: "+results[0].gameObject.name);
             var cat = results[0].gameObject.GetComponent<ObjectStickScript>();
             if (!cats.Contains(cat))
             {
