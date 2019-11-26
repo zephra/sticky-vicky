@@ -2359,6 +2359,11 @@ PrefabInstance:
       propertyPath: inputAccel
       value: 1500
       objectReference: {fileID: 0}
+    - target: {fileID: 2663758282204705407, guid: 8ccc9e531668c42338d56d809c3a4781,
+        type: 3}
+      propertyPath: camRotationSpeed
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2347273366160741878, guid: 8ccc9e531668c42338d56d809c3a4781,
         type: 3}
       propertyPath: camera

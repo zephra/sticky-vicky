@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class Controls : MonoBehaviour
 {
@@ -55,6 +56,12 @@ public class Controls : MonoBehaviour
         if (Input.GetKey(KeyCode.D)) // CAMERA RIGHT
         {
             RotateCamera(center, camRotationSpeed);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            Scene scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.name);
         }
 
 
