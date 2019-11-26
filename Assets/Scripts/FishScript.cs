@@ -15,11 +15,16 @@ public class FishScript : MonoBehaviour
     public float fleeForce = 500;
     public float maxForce = 2000;
 
-    public ObjectStickScript chosenCat = null;
+    public float chooseTimeMax = 2f;
+    public float chooseTimeMin = 0.5f;
+
+    private ObjectStickScript chosenCat = null;
 
     private Collider[] results;
     private List<ObjectStickScript> cats;
     private List<ObjectStickScript> forgetCats;
+
+    private float chooseTimer = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -36,7 +41,7 @@ public class FishScript : MonoBehaviour
 //        var randomCat = cats[Random.Range(0, cats.Count)];
 //        var randomIndex = Random.Range(0, cats.Count);
 
-        var minDist = 0f;
+//        var minDist = 0f;
         
         for(int i = 0; i < cats.Count; i++)
         {
@@ -47,13 +52,13 @@ public class FishScript : MonoBehaviour
             if (distance > forgetRadius)
             {
                 forgetCats.Add(cat);
-                continue;
+//                continue;
             }
             
-            if (distance < minDist)
-            {
-                minDist = distance;
-            }
+//            if (distance < minDist)
+//            {
+//                minDist = distance;
+//            }
 
 //            if (randomIndex == i && !chosenCat)
 //            {
@@ -73,20 +78,34 @@ public class FishScript : MonoBehaviour
         }
         forgetCats.Clear();
 
-        if (!chosenCat && cats.Count > 0)
-        {
-            var randomIndex = 0;
-            if (cats.Count > 1)
-            {
-                var dist = 0f;
-                do
-                {
-                    randomIndex = Random.Range(0, cats.Count);
-                    dist = (transform.position - cats[randomIndex].transform.position).magnitude;
-                } while (dist <= minDist);
-            }
+//        if (chosenCat && (transform.position - chosenCat.transform.position).magnitude <= minDist)
+//            chosenCat = null;
+//
+//        if (!chosenCat && cats.Count > 0)
+//        {
+//            var randomIndex = 0;
+//            if (cats.Count > 1)
+//            {
+//                var dist = 0f;
+//                do
+//                {
+//                    randomIndex = Random.Range(0, cats.Count);
+//                    dist = (transform.position - cats[randomIndex].transform.position).magnitude;
+//                } while (dist <= minDist);
+//            }
+//
+//            chosenCat = cats[randomIndex];
+//        }
 
-            chosenCat = cats[randomIndex];
+        if (chooseTimer > 0)
+            chooseTimer -= Time.deltaTime;
+        
+        if ((!chosenCat || chooseTimer <= 0) && cats.Count > 0)
+        {
+            var index = Random.Range(0, cats.Count);
+//            Debug.Log(gameObject.name +": cats count: "+cats.Count+", index: "+index);
+            chosenCat = cats[index];
+            chooseTimer = Random.Range(chooseTimeMin, chooseTimeMax);
         }
 
         if (chosenCat)

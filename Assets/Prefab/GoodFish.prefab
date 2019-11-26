@@ -146,6 +146,8 @@ MonoBehaviour:
   forgetRadius: 50
   fleeForce: 1500
   maxForce: 2000
+  chooseTimeMax: 1
+  chooseTimeMin: 0.2
 --- !u!1001 &9145142813911220166
 PrefabInstance:
   m_ObjectHideFlags: 0

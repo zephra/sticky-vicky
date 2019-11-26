@@ -195,11 +195,13 @@ MonoBehaviour:
   fleeFromLayer:
     serializedVersion: 2
     m_Bits: 1024
-  fleeWhileSticked: 0
+  fleeWhileSticked: 1
   detectionRadius: 60
   forgetRadius: 120
   fleeForce: -2000
   maxForce: 3000
+  chooseTimeMax: 10
+  chooseTimeMin: 2
 --- !u!1001 &187775480792962033
 PrefabInstance:
   m_ObjectHideFlags: 0
