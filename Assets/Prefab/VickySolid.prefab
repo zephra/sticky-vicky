@@ -45,7 +45,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 10
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -66,14 +66,14 @@ MonoBehaviour:
   camera: {fileID: 0}
   controls: {fileID: 2663758282204705407}
   chargeParticles: {fileID: 0}
-  massRotateBonus: 4.7
+  massRotateBonus: 2
   slideMultiplier: 0.18
   maxSpin: 15
   maxChargeTime: 2
   minChargeTime: 0.3
   chargeCooldownTime: 0.5
   chargeForce: 500
-  chargeMultiplier: 1.8
+  chargeMultiplier: 1
   massFactor: 0.7
   maxVickyPushForce: 2500
   stickedObjects: []
@@ -91,8 +91,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 0}
-  inputAccel: 1000
-  camRotationSpeed: 8
+  inputAccel: 1500
+  camRotationSpeed: 6
   onSpaceDown:
     m_PersistentCalls:
       m_Calls:
