@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class FishScript : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class FishScript : MonoBehaviour
     public float forgetRadius = 20;
     public float fleeForce = 500;
     public float maxForce = 2000;
+
+    public ObjectStickScript chosenCat = null;
 
     private Collider[] results;
     private List<ObjectStickScript> cats;
@@ -30,19 +33,68 @@ public class FishScript : MonoBehaviour
     private void Update()
     {
         var moveForce = Vector3.zero;
+//        var randomCat = cats[Random.Range(0, cats.Count)];
+//        var randomIndex = Random.Range(0, cats.Count);
+
+        var minDist = 0f;
         
-        foreach (var cat in cats)
+        for(int i = 0; i < cats.Count; i++)
         {
+            var cat = cats[i];
             var direction = (transform.position - cat.transform.position);
+            var distance = direction.magnitude;
             
-            if (direction.magnitude > forgetRadius)
+            if (distance > forgetRadius)
             {
                 forgetCats.Add(cat);
                 continue;
             }
+            
+            if (distance < minDist)
+            {
+                minDist = distance;
+            }
 
-            var dirNorm = direction.normalized;
+//            if (randomIndex == i && !chosenCat)
+//            {
+////                var dirNorm = direction.normalized;
+////                moveForce += dirNorm * fleeForce;
+//                chosenCat = cat;
+//            }
+        }
+
+        foreach (var cat in forgetCats)
+        {
+            cats.Remove(cat);
+            if (chosenCat && chosenCat.Equals(cat))
+            {
+                chosenCat = null;
+            }
+        }
+        forgetCats.Clear();
+
+        if (!chosenCat && cats.Count > 0)
+        {
+            var randomIndex = 0;
+            if (cats.Count > 1)
+            {
+                var dist = 0f;
+                do
+                {
+                    randomIndex = Random.Range(0, cats.Count);
+                    dist = (transform.position - cats[randomIndex].transform.position).magnitude;
+                } while (dist <= minDist);
+            }
+
+            chosenCat = cats[randomIndex];
+        }
+
+        if (chosenCat)
+        {
+            var chosenDirection = (transform.position - chosenCat.transform.position);
+            var dirNorm = chosenDirection.normalized;
             moveForce += dirNorm * fleeForce;
+            moveForce.y += fleeForce * 0.1f;
         }
 
         if (moveForce.magnitude > maxForce)
@@ -54,11 +106,6 @@ public class FishScript : MonoBehaviour
         
         if (!fleeWhileSticked && stickyScript.stuckToVicky)
             cats.Clear();
-
-        foreach (var cat in forgetCats)
-        {
-            cats.Remove(cat);
-        }
     }
 
     // Update is called once per frame
