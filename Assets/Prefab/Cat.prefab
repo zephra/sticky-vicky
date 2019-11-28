@@ -195,7 +195,7 @@ MonoBehaviour:
   fleeFromLayer:
     serializedVersion: 2
     m_Bits: 1024
-  fleeWhileSticked: 1
+  fleeWhileSticked: 0
   detectionRadius: 60
   forgetRadius: 120
   fleeForce: -2000
